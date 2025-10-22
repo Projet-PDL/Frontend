@@ -98,7 +98,6 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 
 La planification du projet **LinkedIn2CV** est organisée en trois grandes phases :
 
----
 
 ### Phase 1 – Conception & Prototype (jusqu’au 24 Octobre 2025)
 
@@ -113,8 +112,7 @@ La planification du projet **LinkedIn2CV** est organisée en trois grandes phase
 - README.md : Documentation du projet.  
 - Cahier de recettes.  
 - Documentation technique initiale.
-
----
+  
 
 ### Phase 2 – Développement complet & Première livraison (jusqu’au 21 Novembre 2025)
 
@@ -133,7 +131,7 @@ La planification du projet **LinkedIn2CV** est organisée en trois grandes phase
 - Documentation mise à jour (technique et utilisateur).  
 - Cahier de recettes mis à jour.  
 
----
+
 
 ### Phase 3 – Optimisation, stabilisation et déploiement (jusqu’au 19 Décembre 2025)
 
@@ -161,7 +159,7 @@ La planification du projet **LinkedIn2CV** est organisée en trois grandes phase
 ## Maquettes & Prototype
 
 Les maquettes du projet ont été réalisées sur **Figma**.  
-  > [Voir le prototype interactif sur Figma](https://www.figma.com/design/uEhSjMNZBFzFAxwjInUk64/LinkedIn2CV?node-id=7-2&t=SPE8bve7vPDgbimy-1)
+  > [Voir le prototype sur Figma](https://www.figma.com/design/uEhSjMNZBFzFAxwjInUk64/LinkedIn2CV?node-id=7-2&t=SPE8bve7vPDgbimy-1)
 
 Le prototype illustre le parcours utilisateur complet :
 - Page d’accueil et authentification
@@ -179,7 +177,7 @@ La documentation technique contient les diagrammes et schémas qui illustrent la
 - **Diagramme de cas d’utilisation (Use Case)** : description des interactions entre les utilisateurs et le système.
 - **Schéma de base de données** : structure des tables, relations et clés primaires/étrangères.
 
-> [Accéder aux diagrammes UML](lien_vers_le_dossier_ou_pdf)
+> [Accéder à la documentation](lien_vers_le_dossier_ou_pdf)
 
 > **Remarque :** Les instructions détaillées pour installer et lancer le projet sont disponibles dans chaque dépôt :
 - Frontend : `install.md` dans le repo frontend  
@@ -193,6 +191,6 @@ La documentation technique contient les diagrammes et schémas qui illustrent la
 Le cahier de recettes décrit les scénarios de test et les vérifications à effectuer pour valider les fonctionnalités du projet.  
 
 **Documents disponibles :**
-- [Cahier de recettes – Version initiale](lien_vers_pdf_initial)  
+> [Cahier de recettes – Version initiale](lien_vers_pdf_initial)  
 
 ---
