@@ -29,7 +29,6 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
    - Ajouter manuellement de nouvelles expériences, formations ou compétences.
    - Choisir un modèle de CV (template) parmi plusieurs styles disponibles.
    - Personnaliser le design du CV (couleurs, polices, mise en page).
-   - Prévisualiser en temps réel le rendu du CV avant la génération finale.
 
 4. **Génération et gestion des CV**
    - Générer automatiquement un CV au format PDF à partir des informations saisies.
@@ -44,7 +43,6 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 
 6. **Administration et maintenance**
    - Ajouter ou mettre à jour les templates de CV par les administrateurs.
-   - Vérifier automatiquement la cohérence des données importées.
    - Gérer les erreurs de parsing ou d’import (fichier invalide, données manquantes, etc.).
 
 ---
@@ -53,10 +51,8 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 -  Mise à jour automatique du CV à chaque changement sur LinkedIn.  
 -  Support multi-langues (FR / EN).  
 -  Suggestions automatiques d’amélioration de CV basées sur l’IA.  
--  Exportation vers d’autres formats (DOCX, HTML).  
--  Espace cloud personnel pour stocker plusieurs CV.  
-
-
+-  Exportation vers d’autres formats (DOCX, HTML).
+  
 ---
 
 ## Stack technique
@@ -89,27 +85,112 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 
 | Nom | Rôle | Responsabilités principales |
 |------|------|-----------------------------|
-| **Manel GOUDJIL** | Cheffe de projet / Frontend Developer | Gestion de projet, coordination de l’équipe, développement frontend avec Vue.js, UI/UX, supervision du CI/CD et du déploiement. |
+| **Manel GOUDJIL** | Cheffe de projet / Frontend Developer | Gestion de projet, coordination de l’équipe, développement frontend avec Vue.js, UI/UX. |
 | **Lan NGUYEN HONG** | Frontend Developer | UI/UX, développement de l’interface utilisateur avec Vue.js, intégration des composants et communication avec le backend. |
-| **Sofiane YEKENE** | Backend Developer | Développement des fonctionnalités backend (Fastify), gestion de l’API, tests unitaires et fonctionnels backend. |
-| **Elisabeth GNIMASSOU** | Full Stack Developer | Développement Vue.js côté frontend et gestion de la base de données PostgreSQL côté backend, intégration front-back. |
+| **Mamy MENDES** | Frontend Developer | UI/UX, développement de l’interface utilisateur avec Vue.js, intégration des composants et communication avec le backend. |
+| **Sofiane YEKENE** | Backend Developer | Développement des fonctionnalités backend (Fastify), gestion de l’API. |
 | **Noah TOMBEZE** | Backend Developer / QA – Testeur | Développement des fonctionnalités backend, rédaction et exécution des tests unitaires et fonctionnels backend. |
-| **Mamy MENDES** | UI/UX / QA Frontend | Maquettes sur Figma, tests frontend |
+| **Elisabeth GNIMASSOU** | Full Stack Developer | Gestion de la base de données PostgreSQL côté backend, développement de certaines fonctionnalités et intégration front-end/back-end.|
 
 ---
 
-## Planification (jalons)
+## Planification du projet
 
-### 🔹 24 Octobre 2025
-- Prototype fonctionnel 
-- Documentation technique initiale
+La planification du projet **LinkedIn2CV** est organisée en trois grandes phases :
 
-### 🔹 21 Novembre 2025
-- Application complète (50%+ de couverture de test)
-- Première validation client
 
-### 🔹 19 Décembre 2025
-- Version stabilisée et optimisée
-- Tests complets et déploiement 
+### Phase 1 – Conception & Prototype (jusqu’au 24 Octobre 2025)
+
+**Objectifs :**
+- Finaliser la conception fonctionnelle et technique (maquettes, architecture, schéma de base de données).  
+- Développer un prototype fonctionnel des principales interfaces utilisateur.  
+- Mettre en place l’environnement de développement (GitHub, CI/CD, Docker, PostgreSQL).  
+- Rédiger la documentation technique initiale.
+
+**Livrables :**
+- Maquettes validées (Figma).  
+- README.md : Documentation du projet.  
+- Cahier de recettes.  
+- Documentation technique initiale.
+  
+
+### Phase 2 – Développement complet & Première livraison (jusqu’au 21 Novembre 2025)
+
+**Objectifs :**
+- Implémenter les principales fonctionnalités :
+  - Authentification et gestion de profil.  
+  - Import et parsing du profil LinkedIn (.json ou URL).  
+  - Affichage des données utilisateur (expériences, formations, compétences, etc.).  
+  - Génération du CV au format PDF via Puppeteer.  
+- Mettre en place les tests unitaires et d’intégration (objectif : 50 % de couverture).  
+- Réaliser la première validation client.
+
+**Livrables :**
+- Application complète et fonctionnelle.  
+- CI/CD automatisée avec GitHub Actions.  
+- Documentation mise à jour (technique et utilisateur).  
+- Cahier de recettes mis à jour.  
+
+
+
+### Phase 3 – Optimisation, stabilisation et déploiement (jusqu’au 19 Décembre 2025)
+
+**Objectifs :**
+- Corriger les bugs identifiés lors des tests et retours client.  
+- Optimiser les performances du rendu PDF et de l’import LinkedIn.  
+- Finaliser la personnalisation des templates de CV.  
+- Renforcer les tests automatisés (objectif : 70 % de couverture).  
+- Déployer la version finale sur Google Cloud Platform.
+
+**Livrables :**
+- Version stable et optimisée de l’application.  
+- Documentation finale (technique et d’exploitation).  
+- Version en ligne prête à l’utilisation.
+
+---
+
+### Suivi et coordination
+
+- **Réunions d’équipe hebdomadaires (chaque séance PDL)** pour le suivi d’avancement et la répartition des tâches.  
+- **Communication et échanges quotidiens via un serveur Discord**, avec des salons dédiés pour la conception, le front-end et le back-end.
+
+---
+
+## Maquettes & Prototype
+
+Les maquettes du projet ont été réalisées sur **Figma**.  
+  > [Voir le prototype sur Figma](https://www.figma.com/design/uEhSjMNZBFzFAxwjInUk64/LinkedIn2CV?node-id=7-2&t=SPE8bve7vPDgbimy-1)
+
+Le prototype illustre le parcours utilisateur complet :
+- Page d’accueil et authentification
+- Import du profil LinkedIn
+- Interface de personnalisation du CV
+- Prévisualisation et téléchargement du CV au format PDF
+  
+---
+## Documentation technique
+
+La documentation technique contient les diagrammes et schémas qui illustrent la structure et le fonctionnement du système.  
+
+**Diagrammes inclus :**
+- **Diagramme de classes** : représentation des entités principales et de leurs relations.  
+- **Diagramme de cas d’utilisation (Use Case)** : description des interactions entre les utilisateurs et le système.
+- **Schéma de base de données** : structure des tables, relations et clés primaires/étrangères.
+
+> [Accéder à la documentation](lien_vers_le_dossier_ou_pdf)
+
+> **Remarque :** Les instructions détaillées pour installer et lancer le projet sont disponibles dans chaque dépôt :
+- Frontend : `install.md` dans le repo frontend  
+- Backend : `install.md` dans le repo backend
+
+
+---
+
+## Cahier de recettes
+
+Le cahier de recettes décrit les scénarios de test et les vérifications à effectuer pour valider les fonctionnalités du projet.  
+
+**Documents disponibles :**
+> [Cahier de recettes – Version initiale](lien_vers_pdf_initial)  
 
 ---
