@@ -8,19 +8,23 @@ import { RouterLink } from 'vue-router'
       <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo"/>
 
       <ul class="navbar-links">
-        <li class="no-hover">
+        <li>
           <i class="bi bi-globe"></i>
           <span>English</span>
         </li>
 
         <li>
-          <i class="bi bi-envelope"></i>
-          <RouterLink to="/Contact" class="link">Contact</RouterLink>
+          <RouterLink to="/contact" class="link">
+            <i class="bi bi-envelope"></i>
+            <span>Contact</span>
+          </RouterLink>
         </li>
 
         <li>
-          <i class="bi bi-info-circle"></i>
-          <RouterLink to="/About" class="link">About</RouterLink>
+          <RouterLink to="/about" class="link">
+            <i class="bi bi-info-circle"></i>
+            <span>About</span>
+          </RouterLink>
         </li>
       </ul>
     </div>
