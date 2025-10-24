@@ -20,7 +20,7 @@ L’ensemble de ces éléments vise à garantir une **architecture modulaire, sc
 ---
 
 ## Vue des Cas d’Usage 
-![Usecase](src\assets\images\Diagrammes\Usecase.png)
+![Usecase](src/assets/images/Diagrammes/Usecase.png)
 
 ---
 
@@ -105,7 +105,7 @@ L’architecture du projet repose sur une **stack moderne et performante**, comb
 Le diagramme de classes décrit la **structure métier** de l’application.  
 Chaque classe correspond à une composante fonctionnelle (utilisateurs, CV, expériences, etc.).
 
-![Classes](src\assets\images\Diagrammes\Classes.png)
+![Classes](src/assets/images/Diagrammes/Classes.png)
 
 ###  Description des classes principales
 
@@ -138,15 +138,15 @@ Ils permettent de visualiser l’ordre des opérations, les échanges de donnée
 Dans ce projet, trois diagrammes de séquence principaux sont présentés :  
 1. **Authentification** :  
 
-![Auth](src\assets\images\Diagrammes\Sequence1.png)
+![Auth](src/assets/images/Diagrammes/Sequence1.png)
 
 2. **Génération de CV** : 
 
-![Generate](src\assets\images\Diagrammes\Sequence2.png)
+![Generate](src/assets/images/Diagrammes/Sequence2.png)
 
 3. **Personnalisation du CV** : 
 
-![Custom](src\assets\images\Diagrammes\Sequence3.png)
+![Custom](src/assets/images/Diagrammes/Sequence3.png)
 
 ---
 
@@ -154,7 +154,7 @@ Dans ce projet, trois diagrammes de séquence principaux sont présentés :
 
 Le schéma relationnel montre la structure des tables et leurs relations.
 
-![BDD](src\assets\images\Diagrammes\BDD.png)
+![BDD](src/assets/images/Diagrammes/BDD.png)
 
 ### Description des tables principales
 
