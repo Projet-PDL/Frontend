@@ -74,6 +74,10 @@ import { RouterLink } from 'vue-router'
   opacity: 1;
 }
 
+.input-url:focus {
+  box-shadow: 0 0 0 4px rgba(10,102,194,.12);
+}
+
 .btn-generate {
   background-color: #0F62A4;
   color: white;
