@@ -60,7 +60,7 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 | Composant | Technologie |
 |------------|--------------|
 | **Backend** | Fastify |
-| **Base de données** | PostgreSQL / SQLite |
+| **Base de données** | PostgreSQL |
 | **Frontend** | VueJS + Bootstrap |
 | **Génération PDF** | Puppeteer |
 | **Conteneurisation** | Docker / Docker Compose |
