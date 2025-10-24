@@ -142,11 +142,11 @@ Dans ce projet, trois diagrammes de séquence principaux sont présentés :
 
 2. **Génération de CV** : 
 
-![Generate](src/assets/images/Diagrammes/Sequence2.png)
+![Generate](src/assets/images/Diagrammes/Sequence2.webp)
 
 3. **Personnalisation du CV** : 
 
-![Custom](src/assets/images/Diagrammes/Sequence3.png)
+![Custom](src/assets/images/Diagrammes/Sequence3.webp)
 
 ---
 
