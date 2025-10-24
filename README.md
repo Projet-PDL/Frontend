@@ -90,7 +90,7 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 | **Mamy MENDES** | Frontend Developer | UI/UX, développement de l’interface utilisateur avec Vue.js, intégration des composants et communication avec le backend. |
 | **Sofiane YEKENE** | Backend Developer | Développement des fonctionnalités backend (Fastify), gestion de l’API. |
 | **Noah TOMBEZE** | Backend Developer / QA – Testeur | Développement des fonctionnalités backend, rédaction et exécution des tests unitaires et fonctionnels backend. |
-| **Elisabeth GNIMASSOU** | Full Stack Developer | Gestion de la base de données PostgreSQL côté backend, développement de certaines fonctionnalités et intégration front-end/back-end.|
+| **Elisabeth GNIMASSOU** | Full Stack Developer | Développement des fonctionnalités backend, et intégration front-end/back-end.|
 
 ---
 
@@ -99,7 +99,7 @@ Le système **LinkedIn2CV** doit permettre à l’utilisateur de :
 La planification du projet **LinkedIn2CV** est organisée en trois grandes phases :
 
 
-### Phase 1 – Conception & Prototype (jusqu’au 24 Octobre 2025)
+### Phase 1 : Conception & Prototype (jusqu’au 24 Octobre 2025)
 
 **Objectifs :**
 - Finaliser la conception fonctionnelle et technique (maquettes, architecture, schéma de base de données).  
@@ -114,7 +114,7 @@ La planification du projet **LinkedIn2CV** est organisée en trois grandes phase
 - Documentation technique initiale.
   
 
-### Phase 2 – Développement complet & Première livraison (jusqu’au 21 Novembre 2025)
+### Phase 2 : Développement complet & Première livraison (jusqu’au 21 Novembre 2025)
 
 **Objectifs :**
 - Implémenter les principales fonctionnalités :
@@ -133,7 +133,7 @@ La planification du projet **LinkedIn2CV** est organisée en trois grandes phase
 
 
 
-### Phase 3 – Optimisation, stabilisation et déploiement (jusqu’au 19 Décembre 2025)
+### Phase 3 : Optimisation, stabilisation et déploiement (jusqu’au 19 Décembre 2025)
 
 **Objectifs :**
 - Corriger les bugs identifiés lors des tests et retours client.  
@@ -168,16 +168,10 @@ Le prototype illustre le parcours utilisateur complet :
 - Prévisualisation et téléchargement du CV au format PDF
   
 ---
+
 ## Documentation technique
 
-La documentation technique contient les diagrammes et schémas qui illustrent la structure et le fonctionnement du système.  
-
-**Diagrammes inclus :**
-- **Diagramme de classes** : représentation des entités principales et de leurs relations.  
-- **Diagramme de cas d’utilisation (Use Case)** : description des interactions entre les utilisateurs et le système.
-- **Schéma de base de données** : structure des tables, relations et clés primaires/étrangères.
-
-> [Accéder à la documentation](lien_vers_le_dossier_ou_pdf)
+La documentation technique, incluant les diagrammes et schémas illustrant la structure et le fonctionnement du système, est disponible dans le fichier **DESIGN.md**.
 
 > **Remarque :** Les instructions détaillées pour installer et lancer le projet sont disponibles dans chaque dépôt :
 - Frontend : `install.md` dans le repo frontend  
@@ -186,11 +180,8 @@ La documentation technique contient les diagrammes et schémas qui illustrent la
 
 ---
 
-## Cahier de recettes
+## Cahier de recette
 
-Le cahier de recettes décrit les scénarios de test et les vérifications à effectuer pour valider les fonctionnalités du projet.  
-
-**Documents disponibles :**
-> [Cahier de recettes – Version initiale](lien_vers_pdf_initial)  
+Le cahier de recette, détaillant les scénarios de test et les vérifications nécessaires pour valider les fonctionnalités du projet, est disponible dans le fichier **RECETTE.md**.
 
 ---
