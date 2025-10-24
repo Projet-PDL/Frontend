@@ -28,7 +28,7 @@ L’ensemble de ces éléments vise à garantir une **architecture modulaire, sc
 
 L’architecture du projet repose sur une **stack moderne et performante**, combinant un front-end réactif, un back-end léger et une base de données robuste, le tout déployé sur des services cloud fiables.
 
-![Architecture](src\assets\images\Diagrammes\Architecture.png)
+![Architecture](src/assets/images/Diagrammes/Architecture.png)
 
 
 ### Front-end : Vue.js
