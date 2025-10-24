@@ -41,7 +41,6 @@ body {
   padding: 24px 0;
 }
 
-
 .navbar-container {
   width: 90%;
   margin: 0 auto;
@@ -53,7 +52,6 @@ body {
 .navbar-logo {
   height: 50px;
 }
-
 
 .navbar-links {
   display: flex;
@@ -67,16 +65,23 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  transition: all 0.25s ease;
 }
 
 .link {
   text-decoration: none; 
   color: black;
+  gap: 8px;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
 }
 
-.navbar-links li:not(.no-hover):hover i,
-.navbar-links li:not(.no-hover):hover .link {
+.link:hover {
+  color: #0a66c2;
+  text-shadow: 0 1px 5px rgba(124, 174, 223, 0.35);
+}
+
+.router-link-exact-active {
   color: #0a66c2;
   text-shadow: 0 1px 5px rgba(124, 174, 223, 0.35);
 }

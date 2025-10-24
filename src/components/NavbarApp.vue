@@ -47,7 +47,7 @@ import { RouterLink } from 'vue-router'
 }
 
 .icon-menu {
-  font-size: 30px;
+  font-size: 25px;
   cursor: pointer;
 }
 
