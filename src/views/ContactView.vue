@@ -73,18 +73,7 @@ import NavbarHome from '@/components/NavbarHome.vue'
 .contact-page {
   min-height: 100vh;
   background : #F9F9F9;
-}
-
-.back-link {
-  display: inline-block;
-  color: #0a66c2;
-  text-decoration: none;
-  font-weight: 600;
-  margin: 40px 0 0 40px;
-}
-
-.back-link:hover {
-  text-shadow: 0 1px 5px rgba(124, 174, 223, 0.35);
+  overflow: hidden;
 }
 
 .intro {
@@ -186,6 +175,7 @@ input, textarea {
   border: 2px solid #80808093; 
   border-radius: 10px;
   padding: 8px 10px;
+  resize: vertical;
 }
 
 .field input::placeholder,
@@ -197,6 +187,7 @@ input:focus, textarea:focus {
   outline: none; 
   border-color: #0a66c2; 
   box-shadow: 0 0 0 2px rgba(10,102,194,.12);
+  
 }
 
 .actions { 
