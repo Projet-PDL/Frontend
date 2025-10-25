@@ -28,7 +28,7 @@ import { RouterLink } from 'vue-router'
         </li>
 
         <li>
-          <RouterLink to="/Login" class="btn-principale">Sign Up</RouterLink>
+          <RouterLink to="/login" class="btn-principale">Sign Up</RouterLink>
         </li>
       </ul>
     </div>

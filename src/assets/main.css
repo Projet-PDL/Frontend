@@ -85,3 +85,15 @@ body {
   color: #0a66c2;
   text-shadow: 0 1px 5px rgba(124, 174, 223, 0.35);
 }
+
+.back-link {
+  display: inline-block;
+  color: #0a66c2;
+  text-decoration: none;
+  font-weight: 600;
+  margin: 40px 0 0 40px;
+}
+
+.back-link:hover {
+  text-shadow: 0 1px 5px rgba(124, 174, 223, 0.35);
+}
