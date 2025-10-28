@@ -1,103 +1,182 @@
+<script setup lang="ts">
+import NavbarLogin from '../components/NavbarLogin.vue'
+import Footer from '../components/Footer.vue'
+</script>
+
 <template>
-  <div class="login-page d-flex flex-column min-vh-100" >
-  
-    <Navbar />
+  <div class="login-page">
+    <!-- Navbar -->
+    <NavbarLogin />
 
-    <!-- Contenu principal -->
-    <div class="container my-auto">
-      <div class="row justify-content-center">
-        <div class="col-md-6 col-lg-4">
-          <div class="card shadow-lg border-0 rounded-4 p-4">
-            <h3 class="text-center mb-4 fw-semibold">Connexion</h3>
+    <!-- Section principale -->
+    <section class="login-section container">
+      <div class="login-content">
+        <!-- Formulaire -->
+        <div class="login-card">
+          <img
+            src="../assets/images/Logo.png"
+            alt="Logo LinkedIn2CV"
+            class="login-logo"
+          />
 
-            <form @submit.prevent="handleLogin">
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Email</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-primary text-white">
-                    <i class="bi bi-envelope-fill"></i>
-                  </span>
-                  <input
-                    type="email"
-                    class="form-control"
-                    v-model="email"
-                    placeholder="Entrez votre email"
-                    required
-                  />
-                </div>
-              </div>
+          <h2 class="login-title">Sign in</h2>
 
-              <div class="mb-3">
-                <label class="form-label fw-semibold">Mot de passe</label>
-                <div class="input-group">
-                  <span class="input-group-text bg-primary text-white">
-                    <i class="bi bi-lock-fill"></i>
-                  </span>
-                  <input
-                    type="password"
-                    class="form-control"
-                    v-model="password"
-                    placeholder="••••••••"
-                    required
-                  />
-                </div>
-              </div>
+          <form>
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                placeholder="Enter your email"
+              />
+            </div>
 
-              <div class="d-grid mt-4">
-                <button type="submit" class="btn btn-primary btn-lg">
-                  <i class="bi bi-box-arrow-in-right me-2"></i> Se connecter
-                </button>
-              </div>
+            <div class="form-group">
+              <label for="password">Password</label>
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                placeholder="Enter your password"
+              />
+              <a href="#" class="forgot-link">Forgot password?</a>
+            </div>
 
-              <p class="text-center mt-3 mb-0">
-                <small>
-                  Pas encore de compte ?
-                  <a href="#" class="text-decoration-none fw-semibold">S'inscrire</a>
-                </small>
-              </p>
-            </form>
-          </div>
+            <div class="form-check">
+              <input type="checkbox" id="remember" class="form-check-input" />
+              <label for="remember" class="form-check-label"
+                >Remember for 30 days</label
+              >
+            </div>
+
+            <button type="submit" class="btn btn-primary w-100 mt-3">
+              Sign in
+            </button>
+
+            <p class="separator">or</p>
+
+            <button type="button" class="btn btn-outline-dark w-100">
+              <i class="bi bi-google me-2"></i> Sign in with Google
+            </button>
+
+            <p class="signup-text">
+              Don't have an account?
+              <RouterLink to="/register" class="text-primary">Sign up</RouterLink>
+            </p>
+          </form>
+        </div>
+
+        <!-- Image à droite -->
+        <div class="login-image">
+          <img
+            src="../assets/images/CV/CV_Login_EN.jpg"
+            alt="CV_Login_EN"
+            class="img-fluid rounded shadow"
+          />
         </div>
       </div>
-    </div>
+    </section>
 
     <!-- Footer -->
     <Footer />
   </div>
 </template>
 
-<script setup>
-
-<script setup>
-import { ref } from "vue";
-import Navbar from "../components/Navbar.vue";
-import Footer from "../components/Footer.vue";
-
-const email = ref("");
-const password = ref("");
-
-const handleLogin = () => {
-  if (!email.value || !password.value) {
-    alert("Veuillez remplir tous les champs !");
-    return;
-  }
-  // Logique temporaire
-  alert(`Connexion réussie pour ${email.value}`);
-};
-</script>
-
 <style scoped>
 .login-page {
-  background: linear-gradient(120deg, #f0f4ff, #eaf1ff);
+  display: flex;
+  flex-direction: column;
+  min-height: 60vh;
 }
 
-.card {
-  background-color: #fff;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.login-section {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+.login-content {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+}
+
+.login-card {
+  width: 380px;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background: #fff;
+}
+
+.login-logo {
+  display: block;
+  margin: 0 auto 1rem;
+  width: 80px;
+}
+
+.login-title {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 400;
+}
+
+.form-control {
+  width: 70%;
+  padding: 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #0d6efd;
+  box-shadow: 0 0 4px rgba(13, 110, 253, 0.2);
+}
+
+.forgot-link {
+  display: block;
+  text-align: right;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.separator {
+  text-align: center;
+  margin: 1rem 0;
+  color: #999;
+}
+
+.signup-text {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.login-image img {
+  max-width: 400px;
+  width: 100%;
 }
 </style>
