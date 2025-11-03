@@ -1,54 +1,109 @@
 <script setup lang="ts">
-import NavbarLogin from '@/components/NavbarLogin.vue'
+import { ref, computed } from "vue";
+import NavbarLogin from "../components/NavbarLogin.vue";
+import Footer from "../components/Footer.vue";
+
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+
+const errors = ref({
+  name: "",
+  email: "",
+  password: "",
+  confirmPassword: ""
+});
+
+// Email RegEx simple
+const validateEmail = (val: string) =>
+  /\S+@\S+\.\S+/.test(val);
+
+
+// 🔐 Validation live
+const validateForm = () => {
+  errors.value.name = name.value.length < 3 ? "Minimum 3 characters" : "";
+  errors.value.email = !validateEmail(email.value) ? "Invalid email" : "";
+  errors.value.password = password.value.length < 6 ? "Min 6 characters" : "";
+  errors.value.confirmPassword = password.value !== confirmPassword.value 
+    ? "Passwords do not match" 
+    : "";
+};
+
+// ✅ Form complet validé ?
+const isFormValid = computed(() =>
+  !errors.value.name &&
+  !errors.value.email &&
+  !errors.value.password &&
+  !errors.value.confirmPassword &&
+  name.value &&
+  email.value &&
+  password.value &&
+  confirmPassword.value
+);
+
+const handleSignup = () => {
+  validateForm();
+  if (!isFormValid.value) return;
+
+  alert("✅ Account created successfully!");
+};
 </script>
+
 
 <template>
   <div class="register-page">
     <NavbarLogin />
 
     <div class="register-container">
-      <!-- Côté gauche : image du CV -->
+
+      <!-- CV Preview -->
       <div class="cv-preview">
+        <!-- Remplace l'image si besoin -->
         <img src="../assets/images/CV/CV_Login_EN.jpg" alt="CV_Login_EN" />
       </div>
 
-      <!-- Côté droit : formulaire d'inscription -->
+      <!-- Signup Form -->
       <div class="register-form-container">
         <h2>Create Account</h2>
 
-        <!-- Bouton Google -->
         <button class="google-btn">
           <i class="bi bi-google"></i> Sign up with Google
         </button>
 
-        <div class="divider">
-          <span>or</span>
-        </div>
+        <div class="divider"><span>or</span></div>
 
-        <form class="register-form">
-          <div class="form-group">
-            <label for="name">Full Name</label>
-            <input type="text" id="name" placeholder="Enter your name" />
-          </div>
+        <form class="register-form" @submit.prevent="handleSignup" @input="validateForm">
 
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Enter your email" />
-          </div>
+  <div class="form-group">
+    <label>Full Name</label>
+    <input v-model="name" type="text" placeholder="Enter your name" />
+    <small v-if="errors.name" class="error">{{ errors.name }}</small>
+  </div>
 
-          <div class="form-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Enter your password" />
-          </div>
+  <div class="form-group">
+    <label>Email</label>
+    <input v-model="email" type="email" placeholder="Enter your email" />
+    <small v-if="errors.email" class="error">{{ errors.email }}</small>
+  </div>
 
-          <div class="form-group">
-            <label for="confirm">Confirm Password</label>
-            <input type="password" id="confirm" placeholder="Confirm your password" />
-          </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input v-model="password" type="password" placeholder="Enter your password" />
+    <small v-if="errors.password" class="error">{{ errors.password }}</small>
+  </div>
 
-          <button type="submit" class="signup-btn">Sign Up</button>
-        </form>
+  <div class="form-group">
+    <label>Confirm Password</label>
+    <input v-model="confirmPassword" type="password" placeholder="Confirm your password" />
+    <small v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</small>
+  </div>
+
+  <button class="signup-btn" :disabled="!isFormValid">Sign Up</button>
+</form>
+
       </div>
+
     </div>
   </div>
 </template>
@@ -61,15 +116,21 @@ import NavbarLogin from '@/components/NavbarLogin.vue'
   background-color: #f8f9fa;
 }
 
+/* MAIN LAYOUT */
 .register-container {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem 3rem; /* Réduit */
   flex: 1;
-  padding: 2rem 5rem;
-  gap: 3rem;
+  gap: 1rem; /* Réduit l'espace entre CV et form */
+  max-width: 1100px;
+  margin: 2 auto;
+
 }
 
+
+/* CV PREVIEW LEFT */
 .cv-preview {
   flex: 1;
   display: flex;
@@ -78,42 +139,43 @@ import NavbarLogin from '@/components/NavbarLogin.vue'
 }
 
 .cv-preview img {
-  width: 90%;
-  max-width: 450px;
+  width: 80%;
+  max-width: 380px;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
+/* FORM RIGHT */
 .register-form-container {
-  flex: 1;
-  background: #fff;
-  padding: 2rem 3rem;
+  width: 380px;
+  background: white;
+  padding: 1.9rem 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
 .register-form-container h2 {
-  font-weight: 600;
   text-align: center;
+  font-weight: 700;
   margin-bottom: 1rem;
 }
 
+/* GOOGLE BUTTON */
 .google-btn {
   width: 100%;
-  background: #fff;
-  border: 1px solid #ddd;
-  color: #444;
-  font-weight: 500;
+  padding: .7rem;
   border-radius: 8px;
-  padding: 0.7rem;
+  border: 1px solid #ddd;
+  font-weight: 500;
   cursor: pointer;
-  transition: 0.2s;
+  background: white;
 }
 
 .google-btn:hover {
-  background-color: #f3f3f3;
+  background: #f3f3f3;
 }
 
+/* DIVIDER */
 .divider {
   text-align: center;
   margin: 1rem 0;
@@ -123,9 +185,7 @@ import NavbarLogin from '@/components/NavbarLogin.vue'
 .divider span {
   background: white;
   padding: 0 10px;
-  position: relative;
-  z-index: 2;
-  color: #666;
+  color: #777;
 }
 
 .divider::before {
@@ -136,13 +196,13 @@ import NavbarLogin from '@/components/NavbarLogin.vue'
   background: #ddd;
   top: 50%;
   left: 0;
-  z-index: 1;
 }
 
+/* FORM FIELDS */
 .register-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.8rem;
 }
 
 .form-group {
@@ -151,39 +211,79 @@ import NavbarLogin from '@/components/NavbarLogin.vue'
 }
 
 .form-group label {
-  font-size: 0.9rem;
+  font-size: .9rem;
+  margin-bottom: .25rem;
   color: #555;
-  margin-bottom: 0.3rem;
 }
 
 .form-group input {
-  padding: 0.7rem;
+  padding: .55rem;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-  font-size: 0.95rem;
-  transition: 0.2s;
+  transition: .2s;
+  font-size: .95rem;
 }
 
 .form-group input:focus {
   border-color: #007bff;
 }
 
+/* SIGN UP BUTTON */
 .signup-btn {
-  margin-top: 1rem;
+  margin-top: .7rem;
   width: 100%;
-  padding: 0.8rem;
-  background-color: #007bff;
-  border: none;
-  border-radius: 8px;
+  padding: .7rem;
+  background: #007bff;
   color: white;
+  border: none;
   font-weight: 600;
-  font-size: 1rem;
+  border-radius: 6px;
   cursor: pointer;
-  transition: 0.2s;
 }
 
 .signup-btn:hover {
-  background-color: #0056b3;
+  background: #0056b3;
+}
+
+.error {
+  color: #d9534f;
+  font-size: 0.8rem;
+  margin-top: 2px;
+}
+
+/* Disable button when invalid */
+.signup-btn:disabled {
+  background: #9bbce8;
+  cursor: not-allowed;
+}
+
+/* Fade In Animation */
+.register-form-container {
+  animation: fadeIn .7s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .register-container {
+    flex-direction: column;
+    padding: 2rem;
+  }
+
+  .cv-preview img {
+    width: 75%;
+    max-width: 300px;
+    margin-bottom: 1.5rem;
+  }
+
+  .register-form-container {
+    width: 100%;
+    max-width: 380px;
+  }
 }
 </style>

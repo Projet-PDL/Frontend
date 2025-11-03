@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import NavbarLogin from '../components/NavbarLogin.vue'
+
 import Footer from '../components/Footer.vue'
 </script>
 
@@ -40,7 +40,7 @@ import Footer from '../components/Footer.vue'
                 class="form-control"
                 placeholder="Enter your password"
               />
-              <a href="#" class="forgot-link">Forgot password?</a>
+             <RouterLink to="/forgotpassword" class="forgot-link">Forgot password?</RouterLink>
             </div>
 
             <div class="form-check">
@@ -179,4 +179,24 @@ label {
   max-width: 400px;
   width: 100%;
 }
+
+.forgot-link {
+  font-size: .9rem;
+  color: #0056b3;
+  cursor: pointer;
+}
+
+.text-primary {
+  font-size: .9rem;
+  color: #0056b3;
+  cursor: pointer;
+}
+.forgot-link:hover {
+  text-decoration: underline;
+}
+
+.text-primary:hover {
+  text-decoration: underline;
+}
+
 </style>
