@@ -171,17 +171,17 @@ Le prototype illustre le parcours utilisateur complet :
 
 ## Documentation technique
 
-La documentation technique, incluant les diagrammes et schémas illustrant la structure et le fonctionnement du système, est disponible dans le fichier **DESIGN.md**.
+La documentation technique, incluant les diagrammes et schémas illustrant la structure et le fonctionnement du système, est disponible dans le fichier [**DESIGN.md**](./DESIGN.md).
 
 > **Remarque :** Les instructions détaillées pour installer et lancer le projet sont disponibles dans chaque dépôt :
-- Frontend : `install.md` dans le repo frontend  
-- Backend : `install.md` dans le repo backend
+- Frontend : [install.md](./INSTALL.md) dans le repo frontend  
+- Backend : [install.md](https://github.com/Projet-PDL/Backend/blob/main/INSTALL.md) dans le repo backend
 
 
 ---
 
 ## Cahier de recette
 
-Le cahier de recette, détaillant les scénarios de test et les vérifications nécessaires pour valider les fonctionnalités du projet, est disponible dans le fichier **RECETTE.md**.
+Le cahier de recette, détaillant les scénarios de test et les vérifications nécessaires pour valider les fonctionnalités du projet, est disponible dans le fichier [**RECETTE.md**](./RECETTE.md)..
 
 ---
