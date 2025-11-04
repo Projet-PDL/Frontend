@@ -12,7 +12,7 @@ import { RouterLink } from 'vue-router'
 
         <div class="generate-section">
           <input type="text" class="form-control input-url" placeholder="Enter your LinkedIn profile URL"/>
-          <button class="btn-generate">Generate</button>
+          <button type="button" class="btn-generate">Generate</button>
         </div>
       </div>
 

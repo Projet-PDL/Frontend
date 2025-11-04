@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import NavbarHome from '@/components/NavbarHome.vue'
+import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
   <NavbarHome />
   <div class="contact-page">
-
     <a href="/" class="back-link">← Homepage</a>
 
     <section class="intro">
@@ -65,6 +65,7 @@ import NavbarHome from '@/components/NavbarHome.vue'
         </div>
       </form>
     </section>
+    <Footer />
   </div>
 </template>
 
@@ -88,7 +89,7 @@ import NavbarHome from '@/components/NavbarHome.vue'
 }
 
 .subtitle { 
-    color:#707070;
+  color:#707070;
 }
 
 .contact-card {
