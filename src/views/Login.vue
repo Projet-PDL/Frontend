@@ -63,7 +63,7 @@ import Footer from '../components/Footer.vue'
 
             <p class="signup-text">
               Don't have an account?
-              <RouterLink to="/register" class="text-primary">Sign up</RouterLink>
+              <RouterLink to="/register" class="Sign-up-link">Sign up</RouterLink>
             </p>
           </form>
         </div>
@@ -191,7 +191,16 @@ label {
   cursor: pointer;
 }
 
-.text-primary {
+.Sign-up-link {
+  display: block;
+  text-align: right;
+  font-size: 0.9rem;
+  margin-top: 0.3rem;
+  color: #0d6efd;
+  text-decoration: none;
+}
+
+.Sign-up-link {
   font-size: .9rem;
   color: #0056b3;
   cursor: pointer;
@@ -200,6 +209,9 @@ label {
   text-decoration: underline;
 }
 
+.Sign-up-link:hover {
+  text-decoration: underline;
+}
 .text-primary:hover {
   text-decoration: underline;
 }
