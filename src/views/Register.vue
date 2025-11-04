@@ -15,18 +15,30 @@ const errors = ref({
   confirmPassword: ""
 });
 
-// Email RegEx simple
+// ✅ Email RegEx simple
 const validateEmail = (val: string) =>
   /\S+@\S+\.\S+/.test(val);
 
+// ✅ Password Regex :
+// min 8 char, 1 uppercase, 1 number, 1 special char
+const passwordRules = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
 
 // 🔐 Validation live
 const validateForm = () => {
-  errors.value.name = name.value.length < 3 ? "Minimum 3 characters" : "";
-  errors.value.email = !validateEmail(email.value) ? "Invalid email" : "";
-  errors.value.password = password.value.length < 6 ? "Min 6 characters" : "";
+  errors.value.name = name.value.length < 3 
+    ? "Minimum 3 characters" 
+    : "";
+
+  errors.value.email = !validateEmail(email.value) 
+    ? "Invalid email" 
+    : "";
+
+  errors.value.password = !passwordRules.test(password.value)
+    ? "Min 8 chars, 1 uppercase, 1 number, 1 special char"
+    : "";
+
   errors.value.confirmPassword = password.value !== confirmPassword.value 
-    ? "Passwords do not match" 
+    ? "Passwords do not match"
     : "";
 };
 
@@ -49,6 +61,7 @@ const handleSignup = () => {
   alert("✅ Account created successfully!");
 };
 </script>
+
 
 
 <template>
