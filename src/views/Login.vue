@@ -7,6 +7,7 @@ import Footer from '../components/Footer.vue'
   <div class="login-page">
     <!-- Navbar -->
     <NavbarLogin />
+    <a href="/" class="back-link"> ←Return </a>
 
     <!-- Section principale -->
     <section class="login-section container">
@@ -50,7 +51,7 @@ import Footer from '../components/Footer.vue'
               >
             </div>
 
-            <button type="submit" class="btn btn-primary w-100 mt-3">
+            <button type="submit" class="btn-principale w-100 mt-3">
               Sign in
             </button>
 
@@ -162,6 +163,10 @@ label {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.btn-principale {
+  cursor: pointer;
 }
 
 .separator {

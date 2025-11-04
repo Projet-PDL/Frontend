@@ -67,7 +67,7 @@ const handleSignup = () => {
 <template>
   <div class="register-page">
     <NavbarLogin />
-
+       <a href="/" class="back-link">←Return</a>
     <div class="register-container">
 
       <!-- CV Preview -->
@@ -112,7 +112,7 @@ const handleSignup = () => {
     <small v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</small>
   </div>
 
-  <button class="signup-btn" :disabled="!isFormValid">Sign Up</button>
+  <button class="btn-principale" :disabled="!isFormValid">Sign Up</button>
 </form>
 
       </div>
@@ -242,15 +242,7 @@ const handleSignup = () => {
 }
 
 /* SIGN UP BUTTON */
-.signup-btn {
-  margin-top: .7rem;
-  width: 100%;
-  padding: .7rem;
-  background: #007bff;
-  color: white;
-  border: none;
-  font-weight: 600;
-  border-radius: 6px;
+.btn-principale {
   cursor: pointer;
 }
 
