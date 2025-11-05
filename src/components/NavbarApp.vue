@@ -27,7 +27,8 @@ import { RouterLink } from 'vue-router'
           <i class="bi bi-download"></i>
         </button>
 
-        <!-- Trois points à ajouter plus tard -->      </div>
+        <!-- Trois points à ajouter plus tard -->
+      </div>
     </div>
   </nav>
 </template>
