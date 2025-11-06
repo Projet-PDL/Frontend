@@ -84,9 +84,7 @@ const handleRegister = () => {
       
     </section>
 
-    <div v-if="showSuccess" class="success-toast">
-      Account created!
-    </div>
+    <div v-if="showSuccess" class="success-toast">Account created!</div>
 
     <Footer />
   </div>
@@ -197,23 +195,4 @@ p{
   box-shadow: -8px 8px 18px rgba(175, 178, 180, 0.83);
 }
 
-.success-toast {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: #0F62A4;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-weight: 500;
-  animation: fadeInOut 2.2s ease forwards;
-  z-index: 99999;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateY(-10px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-10px); }
-}
 </style>

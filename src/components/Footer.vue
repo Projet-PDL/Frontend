@@ -1,5 +1,19 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import { ref } from "vue"
+
+const email = ref("") 
+const showSuccess = ref(false)
+
+const handleSubscribe = () => {
+  if (!email.value) return
+  showSuccess.value = true
+  email.value = ""
+
+  setTimeout(() => {
+    showSuccess.value = false
+  }, 3000)
+}
 </script>
 
 <template>
@@ -7,8 +21,8 @@ import { RouterLink } from 'vue-router'
     <h2>Get access to exclusive updates</h2>
 
     <div class="newsletter-section">
-        <input type="email" class="form-control input-url" placeholder="your@email.com"/>
-        <button type="button" class="btn-newsletter">subscribe to the newsletter</button>
+        <input v-model="email" type="email" class="form-control input-url" placeholder="your@email.com"/>
+        <button type="button" class="btn-principale" @click="handleSubscribe">subscribe to the newsletter</button>
     </div>
 
     <div class="information-section">
@@ -46,6 +60,7 @@ import { RouterLink } from 'vue-router'
           </div>
         </div>
     </div>
+    <div v-if="showSuccess" class="success-toast">You have subscribed to the newsletter!</div>
   </div>
 </template>
 
@@ -91,12 +106,7 @@ h2 {
   box-shadow: none;
 }
 
-.btn-newsletter {
-  background-color: #0F62A4;
-  color: white;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
-  border: none;
+.btn-principale {
   border-radius: 8px;
   padding: 15px 40px;
   text-decoration: none;
@@ -107,10 +117,6 @@ h2 {
   right: 25px;
   top: 50%;
   transform: translateY(-50%);
-}
-
-.btn-newsletter:hover {
-  background-color: rgb(24, 87, 151);
 }
 
 .information-section {

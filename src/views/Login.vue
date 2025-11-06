@@ -199,12 +199,6 @@ section {
   text-align: center;
 }
 
-.error {
-  color: red;
-  font-size: 14px;
-  margin-bottom: 10px;
-}
-
 .or-line{
   display: flex;
   align-items: center;
@@ -287,26 +281,6 @@ section {
 .fade-popup-leave-to {
   opacity: 0;
   transform: translateY(-15px);
-}
-
-.success-toast {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  background: #0F62A4;
-  color: white;
-  padding: 12px 18px;
-  border-radius: 8px;
-  font-weight: 500;
-  z-index: 99999;
-  animation: fadeInOut 3s ease forwards;
-}
-
-@keyframes fadeInOut {
-  0% { opacity: 0; transform: translateY(-10px); }
-  10% { opacity: 1; transform: translateY(0); }
-  90% { opacity: 1; }
-  100% { opacity: 0; transform: translateY(-10px); }
 }
 
 </style>
