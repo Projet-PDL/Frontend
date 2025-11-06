@@ -1,6 +1,34 @@
 <script setup lang="ts">
 import NavbarHome from '@/components/NavbarHome.vue'
 import Footer from '@/components/Footer.vue'
+import { ref } from "vue"
+
+const first_name = ref("")
+const last_name = ref("")
+const email = ref("")
+const phone = ref("")
+const message = ref("")
+const errorMessage = ref("")
+const mailtoLink = ref("#")
+
+const sendMail = () => {
+  errorMessage.value = ""
+
+  if (!first_name.value || !last_name.value || !email.value || !message.value) {
+    errorMessage.value = "Please fill in all required fields (*)."
+    mailtoLink.value = "#"
+    return
+  }
+
+  const subject = encodeURIComponent(`Message from ${first_name.value} ${last_name.value}`)
+  const body = encodeURIComponent(
+    `Name: ${first_name.value} ${last_name.value}\nEmail: ${email.value}\nPhone: ${phone.value}\n\nMessage:\n${message.value}`
+  )
+
+  mailtoLink.value = `mailto:contact@linkedin2cv.com?subject=${subject}&body=${body}`
+
+  window.location.href = mailtoLink.value
+}
 </script>
 
 <template>
@@ -38,31 +66,34 @@ import Footer from '@/components/Footer.vue'
       <form class="form-panel">
         <div class="form-grid two-cols">
           <div class="field">
-            <label for="first-name">First name*</label>
-            <input id="first-name" type="text" placeholder="Your first name" />
+            <label>First name*</label>
+            <input v-model="first_name" type="text" placeholder="Your first name" />
           </div>
           <div class="field">
-            <label for="last-name">Last name*</label>
-            <input id="last-name" type="text" placeholder="Your last name" />
+            <label>Last name*</label>
+            <input v-model="last_name" type="text" placeholder="Your last name" />
           </div>
           <div class="field">
-            <label for="email">Email*</label>
-            <input id="email" type="email" placeholder="your@email.com" />
+            <label>Email*</label>
+            <input v-model="email" type="email" placeholder="your@email.com" />
           </div>
           <div class="field">
-            <label for="phone">Phone</label>
-            <input id="phone" type="text" placeholder="+33 ..." />
+            <label>Phone</label>
+            <input v-model="phone" type="text" placeholder="+33 ..." />
           </div>
         </div>
 
         <div class="field message">
-          <label for="message">Message*</label>
-          <textarea id="message" rows="4" placeholder="Write your message here"></textarea>
+          <label>Message*</label>
+          <textarea v-model="message" rows="4" placeholder="Write your message here"></textarea>
         </div>
 
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+
         <div class="actions">
-          <button type="submit" class="btn-principale">Send message</button>
+          <a :href="mailtoLink" class="btn-principale" @click="sendMail">Send message</a>
         </div>
+
       </form>
     </section>
     <Footer />
@@ -195,6 +226,13 @@ input:focus, textarea:focus {
     display: flex; 
     justify-content: flex-end; 
     margin-top: 28px; 
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin: 20px 0 -10px;
+  text-align: right;
 }
 
 </style>
