@@ -6,17 +6,18 @@ import { useRouter } from "vue-router"
 
 const router = useRouter()
 
-const fullName = ref("")
+const first_name = ref("")
+const last_name = ref("")
 const email = ref("")
 const password = ref("")
 const confirmPassword = ref("")
-const errorMessage = ref("")
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const showSuccess = ref(false)
+const errorMessage = ref("")
 
 const handleRegister = () => {
-  if (!fullName.value || !email.value || !password.value || !confirmPassword.value) {
+  if (!first_name.value || !last_name.value || !email.value || !password.value || !confirmPassword.value) {
     errorMessage.value = "All fields are required!"
     return
   }
@@ -54,8 +55,9 @@ const handleRegister = () => {
         </button>
 
         <p>or use email for registration</p>
-
-        <input v-model="fullName" type="text" class="form-control" placeholder="Full Name" />
+        
+        <input v-model="first_name" type="text" class="form-control" placeholder="First name" />
+        <input v-model="last_name" type="text" class="form-control" placeholder="Last name" />
         <input v-model="email" type="email" class="form-control" placeholder="Email" />
 
         <div class="password-field">

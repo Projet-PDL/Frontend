@@ -3,11 +3,11 @@ import { ref } from "vue";
 
 const email = ref("");
 
-const emit = defineEmits(["close", "submit"]);
+const emit = defineEmits(["close", "forgotPassword"]);
 
 const handleSubmit = () => {
   if (!email.value) return;
-  emit("submit", email.value);
+  emit("forgotPassword", email.value);
 };
 </script>
 

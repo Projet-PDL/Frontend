@@ -7,11 +7,11 @@ import { ref } from "vue";
 
 const email = ref("")
 const password = ref("")
-const errorMessage = ref("")
 const showPassword = ref(false)
-const rememberMe = ref(false)
 const showForgotPassword = ref(false)
+const rememberMe = ref(false)
 const showSuccess = ref(false)
+const errorMessage = ref("")
 
 const handleLogin = () => {
   if (!email.value || !password.value) {
@@ -103,7 +103,7 @@ const handleForgotSubmit = (forgotEmail: string) => {
       <ForgotPassword
         v-if="showForgotPassword"
         @close="showForgotPassword = false"
-        @submit="handleForgotSubmit"
+        @forgotPassword="handleForgotSubmit"
       />
     </transition>
     <div v-if="showSuccess" class="success-toast">
