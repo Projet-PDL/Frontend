@@ -67,25 +67,25 @@ const sendMail = () => {
         <div class="form-grid two-cols">
           <div class="field">
             <label>First name*</label>
-            <input v-model="first_name" type="text" placeholder="Your first name" />
+            <input v-model="first_name" class="input-field" type="text" placeholder="Your first name" />
           </div>
           <div class="field">
             <label>Last name*</label>
-            <input v-model="last_name" type="text" placeholder="Your last name" />
+            <input v-model="last_name" class="input-field" type="text" placeholder="Your last name" />
           </div>
           <div class="field">
             <label>Email*</label>
-            <input v-model="email" type="email" placeholder="your@email.com" />
+            <input v-model="email" class="input-field" type="email" placeholder="your@email.com" />
           </div>
           <div class="field">
             <label>Phone</label>
-            <input v-model="phone" type="text" placeholder="+33 ..." />
+            <input v-model="phone" class="input-field" type="text" placeholder="+33 ..." />
           </div>
         </div>
 
         <div class="field message">
           <label>Message*</label>
-          <textarea v-model="message" rows="4" placeholder="Write your message here"></textarea>
+          <textarea v-model="message" class="input-field" rows="4" placeholder="Write your message here"></textarea>
         </div>
 
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
@@ -201,25 +201,6 @@ const sendMail = () => {
 
 label { 
     font-weight: 500; 
-}
-
-input, textarea {
-  border: 2px solid #80808093; 
-  border-radius: 10px;
-  padding: 8px 10px;
-  resize: vertical;
-}
-
-.field input::placeholder,
-.field textarea::placeholder {
-  color: #8E8E8E;
-}
-
-input:focus, textarea:focus {
-  outline: none; 
-  border-color: #0a66c2; 
-  box-shadow: 0 0 0 2px rgba(10,102,194,.12);
-  
 }
 
 .actions { 

@@ -86,6 +86,30 @@ body {
   text-shadow: 0 1px 5px rgba(124, 174, 223, 0.35);
 }
 
+.input-field {
+  width: 100%;
+  padding: 8px 10px;
+  border: 2px solid #80808093; 
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+input-field {
+  border: 2px solid #80808093; 
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.input-field::placeholder {
+  color: #8E8E8E;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #0a66c2;
+  box-shadow: 0 0 0 2px rgba(10, 102, 194, 0.12);
+}
+
 .back-link {
   display: inline-block;
   color: #0a66c2;
@@ -123,4 +147,5 @@ body {
   90% { opacity: 1; }
   100% { opacity: 0; transform: translateY(-10px); }
 }
+
 

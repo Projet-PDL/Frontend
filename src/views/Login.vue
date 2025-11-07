@@ -53,14 +53,14 @@ const handleForgotSubmit = (forgotEmail: string) => {
         <input
             v-model="email"
             type="email"
-            class="form-control"
+            class="input-field"
             placeholder="Email"
         />
         <div class="password-field">
           <input 
             v-model="password"
             :type="showPassword ? 'text' : 'password'"
-            class="form-control"
+            class="input-field"
             placeholder="Password"
           />
           <span class="toggle-password" @click="showPassword = !showPassword">
@@ -145,15 +145,10 @@ section {
   margin: 20px 0 20px;
 }
 
-.form-control {
+.input-field {
   padding: 10px 15px 10px;
   border-radius: 4px;
-  border: 1px solid #9b9b9bff;
   margin-bottom: 1rem;
-}
-
-.form-control::placeholder {
-  color: #8E8E8E;
 }
 
 .password-field {
@@ -163,7 +158,7 @@ section {
 .toggle-password {
   position: absolute;
   right: 15px;
-  top: 50%;
+  top: 38%;
   transform: translateY(-50%);
   font-size: 14px;
   color: #0F62A4;

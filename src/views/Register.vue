@@ -32,7 +32,7 @@ const handleRegister = () => {
 
   setTimeout(() => {
     showSuccess.value = false
-    router.push("/app")
+    router.push("/creation")
   }, 1500)
 }
 </script>
@@ -56,19 +56,19 @@ const handleRegister = () => {
 
         <p>or use email for registration</p>
         
-        <input v-model="first_name" type="text" class="form-control" placeholder="First name" />
-        <input v-model="last_name" type="text" class="form-control" placeholder="Last name" />
-        <input v-model="email" type="email" class="form-control" placeholder="Email" />
+        <input v-model="first_name" type="text" class="input-field" placeholder="First name" />
+        <input v-model="last_name" type="text" class="input-field" placeholder="Last name" />
+        <input v-model="email" type="email" class="input-field" placeholder="Email" />
 
         <div class="password-field">
-          <input :type="showPassword ? 'text' : 'password'" v-model="password" class="form-control" placeholder="Password" />
+          <input :type="showPassword ? 'text' : 'password'" v-model="password" class="input-field" placeholder="Password" />
           <span class="toggle-password" @click="showPassword = !showPassword">
             {{ showPassword ? 'Hide' : 'Show' }}
           </span>
         </div>
 
         <div class="password-field">
-          <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword" class="form-control" placeholder="Confirm Password" />
+          <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword" class="input-field" placeholder="Confirm Password" />
           <span class="toggle-password" @click="showConfirmPassword = !showConfirmPassword">
             {{ showConfirmPassword ? 'Hide' : 'Show' }}
           </span>
@@ -144,10 +144,9 @@ p{
   color: #7e7e7eff;
 }
 
-.form-control {
+.input-field {
   padding: 10px 15px 10px;
   border-radius: 4px;
-  border: 1px solid #9b9b9bff;
   margin-bottom: 20px;
 }
 
@@ -158,7 +157,7 @@ p{
 .toggle-password {
   position: absolute;
   right: 15px;
-  top: 50%;
+  top: 38%;
   transform: translateY(-50%);
   font-size: 14px;
   color: #0F62A4;
