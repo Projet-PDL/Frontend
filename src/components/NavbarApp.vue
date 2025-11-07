@@ -37,6 +37,7 @@ import { RouterLink } from 'vue-router'
 <style scoped>
 
 .navbar {
+  background-color: white;
   width: 90%;
   margin: 0 auto;
 }
