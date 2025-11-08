@@ -169,7 +169,7 @@ section {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 20px 0 30px;
+  margin: 5px 0 30px;
   font-size: 13px;
 }
 
