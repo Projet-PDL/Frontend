@@ -98,7 +98,7 @@ function removePhoto() {
         <div class="form-row">
           <label>Full name</label>
           <div class="name-photo-row">
-            <input v-model="full_name" class="input-field input-creation" placeholder="Noelis Mané" />
+            <input v-model="full_name" class="input-field input-creation" placeholder="e.g. Noelis Mané" />
             <label class="photo-upload">
                 <input type="file" accept="image/*" @change="handlePhotoUpload" hidden />
                 <div class="photo">
@@ -196,19 +196,6 @@ function removePhoto() {
   gap: 15px;
   margin: 10px 0 0;
   font-size: 18px;
-}
-
-.form-row,
-.form-grid > div {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 15px;
 }
 
 .name-photo-row{
