@@ -10,14 +10,12 @@ const profile = ref({
 
 <template>
   <div class="section-creation">
-    <div v-if="!isEditing" class="section-creation-header">
+    <div v-if="!isEditing" class="section-creation-header" @click="isEditing = true">
       <div class="section-creation-icon-title">
         <i class="bi bi-person-fill"></i>
         <span>Profile</span>
       </div>
-      <button class="chevron-btn" @click="isEditing = true">
-        <i class="bi bi-chevron-down"></i>
-      </button>
+      <i class="bi bi-chevron-down"></i>
     </div>
 
     <div v-else class="edit-mode section-creation-content">
@@ -34,12 +32,3 @@ const profile = ref({
     </div>
   </div>
 </template>
-
-<style scoped>
-.chevron-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-}
-</style>

@@ -98,7 +98,7 @@ function removePhoto() {
         <div class="form-row">
           <label>Full name</label>
           <div class="name-photo-row">
-            <input v-model="full_name" class="input-field input-creation" placeholder="e.g. Noelis Mané" />
+            <input v-model="full_name" class="input-field input-creation" placeholder="Noelis Mané" />
             <label class="photo-upload">
                 <input type="file" accept="image/*" @change="handlePhotoUpload" hidden />
                 <div class="photo">
