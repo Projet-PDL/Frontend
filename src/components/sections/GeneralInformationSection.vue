@@ -72,7 +72,7 @@ function removePhoto() {
 
 <template>
   <div class="general-information">
-    <div v-if="!isEditing" class="view-mode">
+    <div v-if="!isEditing">
       <h2 :class="{ 'placeholder': !full_name }">
         {{ full_name || 'Your name' }}
       </h2>     
@@ -98,7 +98,7 @@ function removePhoto() {
         <div class="form-row">
           <label>Full name</label>
           <div class="name-photo-row">
-            <input v-model="full_name" class="input-field" placeholder="Noelis Mané" />
+            <input v-model="full_name" class="input-field input-creation" placeholder="Noelis Mané" />
             <label class="photo-upload">
                 <input type="file" accept="image/*" @change="handlePhotoUpload" hidden />
                 <div class="photo">
@@ -117,42 +117,42 @@ function removePhoto() {
 
         <div class="form-row">
           <label>Professional title</label>
-          <input v-model="profile.headline" class="input-field" placeholder="e.g. Full Stack Developer" />
+          <input v-model="profile.headline" class="input-field input-creation" placeholder="e.g. Full Stack Developer" />
         </div>
 
         <div class="form-row">
           <label>Email</label>
-          <input v-model="profile.email" class="input-field" placeholder="e.g. noelis.mane@linkedin2cv.com" />
+          <input v-model="profile.email" class="input-field input-creation" placeholder="e.g. noelis.mane@linkedin2cv.com" />
         </div>
 
         <div class="form-grid">
           <div>
             <label>Date of Birth</label>
-            <input v-model="profile.birth_date" type="date" class="input-field" placeholder="Enter your birth date" />
+            <input v-model="profile.birth_date" type="date" class="input-field input-creation" placeholder="Enter your birth date" />
           </div>
           <div>
             <label>Phone</label>
-            <input v-model="profile.phone" class="input-field" placeholder="e.g. +33 6 02 19 02 49" />
+            <input v-model="profile.phone" class="input-field input-creation" placeholder="e.g. +33 6 02 19 02 49" />
           </div>
         </div>
 
         <div class="form-grid">
           <div>
             <label>Location</label>
-            <input v-model="location" class="input-field" placeholder="e.g. Rennes, France" />
+            <input v-model="location" class="input-field input-creation" placeholder="e.g. Rennes, France" />
           </div>
           <div>
             <label>Website</label>
-            <input v-model="profile.website_url" class="input-field" placeholder="e.g. www.linkedin2cv.com" />
+            <input v-model="profile.website_url" class="input-field input-creation" placeholder="e.g. www.linkedin2cv.com" />
           </div>
         </div>
 
         <div class="form-row">
           <label>Availability</label>
-          <input v-model="profile.availability" class="input-field" placeholder="e.g. Remote work | Immediate start" />
+          <input v-model="profile.availability" class="input-field input-creation" placeholder="e.g. Remote work | Immediate start" />
         </div>
 
-        <button type="submit" class="btn-principale">Done</button>
+        <button type="submit" class="btn-principale btn-creation">Done</button>
       </form>
     </div>
   </div>
@@ -198,23 +198,6 @@ function removePhoto() {
   font-size: 18px;
 }
 
-.edit-mode {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.edit-form {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.edit-form label{
-    font-size: 20px;
-    font-weight: 500;
-}
-
 .form-row,
 .form-grid > div {
   display: flex;
@@ -226,14 +209,6 @@ function removePhoto() {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
-}
-
-input {
-  border: 2px solid #f2f2f2;
-  padding: 10px;
-  border-radius: 6px;
-  background: #f2f2f2;
-  font-size: 16px;
 }
 
 .name-photo-row{
@@ -299,11 +274,6 @@ input {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-.btn-principale{
-    width: 25%;
-    margin: 10px auto 0;
 }
 
 </style>
