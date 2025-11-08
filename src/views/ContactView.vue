@@ -67,19 +67,19 @@ const sendMail = () => {
         <div class="form-grid two-cols">
           <div class="field">
             <label>First name*</label>
-            <input v-model="first_name" class="input-field" type="text" placeholder="Your first name" />
+            <input v-model="first_name" class="input-field" type="text" placeholder="e.g. Noélis" />
           </div>
           <div class="field">
             <label>Last name*</label>
-            <input v-model="last_name" class="input-field" type="text" placeholder="Your last name" />
+            <input v-model="last_name" class="input-field" type="text" placeholder="e.g. Mané" />
           </div>
           <div class="field">
             <label>Email*</label>
-            <input v-model="email" class="input-field" type="email" placeholder="your@email.com" />
+            <input v-model="email" class="input-field" type="email" placeholder="e.g. noelis.mane@linkedin2cv.com" />
           </div>
           <div class="field">
             <label>Phone</label>
-            <input v-model="phone" class="input-field" type="text" placeholder="+33 ..." />
+            <input v-model="phone" class="input-field" type="text" placeholder="e.g. +33 6 02 19 02 49" />
           </div>
         </div>
 
