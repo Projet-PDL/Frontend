@@ -17,26 +17,32 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/contact',
+      name: 'contact',
+      component: () => import('../views/ContactView.vue'),
+    },
 
     {
       path: '/login',
-      name: 'Login',
+      name: 'login',
       component: () => import('../views/Login.vue'),
-    },
-
-     {
-
-      path: "/forgotpassword",
-      name: "forgotpassword",
-      component: () => import("../views/ForgotPassword.vue")
     },
 
     {
       path: '/register',
-      name: 'Register',
+      name: 'register',
       component: () => import('../views/Register.vue'),
     },
   ],
+})
+
+router.afterEach(() => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
 })
 
 export default router

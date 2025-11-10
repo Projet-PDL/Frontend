@@ -1,294 +1,198 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import NavbarLogin from "../components/NavbarLogin.vue";
-import Footer from "../components/Footer.vue";
+import NavbarLogin from '@/components/NavbarLogin.vue'
+import Footer from '@/components/Footer.vue'
+import { ref } from "vue"
+import { useRouter } from "vue-router"
 
-const name = ref("");
-const email = ref("");
-const password = ref("");
-const confirmPassword = ref("");
+const router = useRouter()
 
-const errors = ref({
-  name: "",
-  email: "",
-  password: "",
-  confirmPassword: ""
-});
+const first_name = ref("")
+const last_name = ref("")
+const email = ref("")
+const password = ref("")
+const confirmPassword = ref("")
+const showPassword = ref(false)
+const showConfirmPassword = ref(false)
+const showSuccess = ref(false)
+const errorMessage = ref("")
 
-// ✅ Email RegEx simple
-const validateEmail = (val: string) =>
-  /\S+@\S+\.\S+/.test(val);
+const handleRegister = () => {
+  if (!first_name.value || !last_name.value || !email.value || !password.value || !confirmPassword.value) {
+    errorMessage.value = "All fields are required!"
+    return
+  }
 
-// ✅ Password Regex :
-// min 8 char, 1 uppercase, 1 number, 1 special char
-const passwordRules = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*]).{8,}$/;
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = "Passwords do not match!"
+    return
+  }
 
-// 🔐 Validation live
-const validateForm = () => {
-  errors.value.name = name.value.length < 3 
-    ? "Minimum 3 characters" 
-    : "";
+  errorMessage.value = ""
+  showSuccess.value = true
 
-  errors.value.email = !validateEmail(email.value) 
-    ? "Invalid email" 
-    : "";
-
-  errors.value.password = !passwordRules.test(password.value)
-    ? "Min 8 chars, 1 uppercase, 1 number, 1 special char"
-    : "";
-
-  errors.value.confirmPassword = password.value !== confirmPassword.value 
-    ? "Passwords do not match"
-    : "";
-};
-
-// ✅ Form complet validé ?
-const isFormValid = computed(() =>
-  !errors.value.name &&
-  !errors.value.email &&
-  !errors.value.password &&
-  !errors.value.confirmPassword &&
-  name.value &&
-  email.value &&
-  password.value &&
-  confirmPassword.value
-);
-
-const handleSignup = () => {
-  validateForm();
-  if (!isFormValid.value) return;
-
-  alert("✅ Account created successfully!");
-};
+  setTimeout(() => {
+    showSuccess.value = false
+    router.push("/app")
+  }, 1500)
+}
 </script>
-
-
 
 <template>
   <div class="register-page">
     <NavbarLogin />
-       <a href="/" class="back-link">←Return</a>
-    <div class="register-container">
 
-      <!-- CV Preview -->
-      <div class="cv-preview">
-        <!-- Remplace l'image si besoin -->
-        <img src="../assets/images/CV/CV_Login_EN.jpg" alt="CV_Login_EN" />
-      </div>
+    <a href="/login" class="back-link">← Return</a>
 
-      <!-- Signup Form -->
-      <div class="register-form-container">
-        <h2>Create Account</h2>
+    <section class="register-section container">
+      <img src="../assets/images/CV/CV_Login_EN.jpg" class="cv-image" />
 
-        <button class="google-btn">
-          <i class="bi bi-google"></i> Sign up with Google
+      <div class="register-card">
+
+        <h2 class="register-title">Create account</h2>
+
+        <button type="button" class="google-circle-btn">
+          <img src="@/assets/images/Google.png" alt="Google icon" class="google-icon" />
         </button>
 
-        <div class="divider"><span>or</span></div>
+        <p>or use email for registration</p>
+        
+        <input v-model="first_name" type="text" class="form-control" placeholder="First name" />
+        <input v-model="last_name" type="text" class="form-control" placeholder="Last name" />
+        <input v-model="email" type="email" class="form-control" placeholder="Email" />
 
-        <form class="register-form" @submit.prevent="handleSignup" @input="validateForm">
+        <div class="password-field">
+          <input :type="showPassword ? 'text' : 'password'" v-model="password" class="form-control" placeholder="Password" />
+          <span class="toggle-password" @click="showPassword = !showPassword">
+            {{ showPassword ? 'Hide' : 'Show' }}
+          </span>
+        </div>
 
-  <div class="form-group">
-    <label>Full Name</label>
-    <input v-model="name" type="text" placeholder="Enter your name" />
-    <small v-if="errors.name" class="error">{{ errors.name }}</small>
-  </div>
+        <div class="password-field">
+          <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword" class="form-control" placeholder="Confirm Password" />
+          <span class="toggle-password" @click="showConfirmPassword = !showConfirmPassword">
+            {{ showConfirmPassword ? 'Hide' : 'Show' }}
+          </span>
+        </div>
 
-  <div class="form-group">
-    <label>Email</label>
-    <input v-model="email" type="email" placeholder="Enter your email" />
-    <small v-if="errors.email" class="error">{{ errors.email }}</small>
-  </div>
+        <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
-  <div class="form-group">
-    <label>Password</label>
-    <input v-model="password" type="password" placeholder="Enter your password" />
-    <small v-if="errors.password" class="error">{{ errors.password }}</small>
-  </div>
+        <button class="btn-principale" @click="handleRegister">Sign up</button>
 
-  <div class="form-group">
-    <label>Confirm Password</label>
-    <input v-model="confirmPassword" type="password" placeholder="Confirm your password" />
-    <small v-if="errors.confirmPassword" class="error">{{ errors.confirmPassword }}</small>
-  </div>
-
-  <button class="btn-principale" :disabled="!isFormValid">Sign Up</button>
-</form>
-
+        <RouterLink to="/login" class="sign-in-link">Already have an account?</RouterLink>
       </div>
 
-    </div>
+      
+    </section>
+
+    <div v-if="showSuccess" class="success-toast">Account created!</div>
+
+    <Footer />
   </div>
 </template>
 
 <style scoped>
-.register-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #f8f9fa;
-}
 
-/* MAIN LAYOUT */
-.register-container {
-  display: flex;
-  justify-content: center;
+.register-section {
+  margin: 100px auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
-  padding: 2rem 3rem; /* Réduit */
-  flex: 1;
-  gap: 1rem; /* Réduit l'espace entre CV et form */
-  max-width: 1100px;
-  margin: 2 auto;
-
+  justify-items: center; 
+  gap: 50px;
 }
 
-
-/* CV PREVIEW LEFT */
-.cv-preview {
-  flex: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.cv-preview img {
-  width: 80%;
-  max-width: 380px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-/* FORM RIGHT */
-.register-form-container {
-  width: 380px;
-  background: white;
-  padding: 1.9rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-}
-
-.register-form-container h2 {
-  text-align: center;
-  font-weight: 700;
-  margin-bottom: 1rem;
-}
-
-/* GOOGLE BUTTON */
-.google-btn {
+.register-card {
   width: 100%;
-  padding: .7rem;
-  border-radius: 8px;
-  border: 1px solid #ddd;
-  font-weight: 500;
-  cursor: pointer;
-  background: white;
+  max-width: 400px;
+  padding: 25px;
+  height: 100%;
 }
 
-.google-btn:hover {
-  background: #f3f3f3;
-}
-
-/* DIVIDER */
-.divider {
+.register-title {
+  color: #0F62A4;
+  font-weight: 700;
+  margin: 15px 0;
+  font-size: 40px;
   text-align: center;
-  margin: 1rem 0;
+}
+
+.google-circle-btn {
+  width: 40px;
+  height: 40px;
+  background: white;
+  border: 1px solid #9b9b9b;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.25s ease;
+  padding: 0;
+  margin: 0 auto 15px;
+}
+
+.google-circle-btn:hover {
+  transform: scale(1.08);
+}
+
+.google-icon {
+  height: 24px;
+}
+
+p{
+  text-align: center;
+  color: #7e7e7eff;
+}
+
+.form-control {
+  padding: 10px 15px 10px;
+  border-radius: 4px;
+  border: 1px solid #9b9b9bff;
+  margin-bottom: 20px;
+}
+
+.password-field {
   position: relative;
 }
 
-.divider span {
-  background: white;
-  padding: 0 10px;
-  color: #777;
-}
-
-.divider::before {
-  content: "";
+.toggle-password {
   position: absolute;
-  width: 100%;
-  height: 1px;
-  background: #ddd;
+  right: 15px;
   top: 50%;
-  left: 0;
-}
-
-/* FORM FIELDS */
-.register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group label {
-  font-size: .9rem;
-  margin-bottom: .25rem;
-  color: #555;
-}
-
-.form-group input {
-  padding: .55rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  transition: .2s;
-  font-size: .95rem;
-}
-
-.form-group input:focus {
-  border-color: #007bff;
-}
-
-/* SIGN UP BUTTON */
-.btn-principale {
+  transform: translateY(-50%);
+  font-size: 14px;
+  color: #0F62A4;
   cursor: pointer;
 }
 
-.signup-btn:hover {
-  background: #0056b3;
-}
-
 .error {
-  color: #d9534f;
-  font-size: 0.8rem;
-  margin-top: 2px;
+  color: red;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
 
-/* Disable button when invalid */
-.signup-btn:disabled {
-  background: #9bbce8;
-  cursor: not-allowed;
+.btn-principale{
+  width: 100%;
+  margin-bottom: 20px;
 }
 
-/* Fade In Animation */
-.register-form-container {
-  animation: fadeIn .7s ease;
+.sign-in-link {
+  display: block;
+  text-align: center;
+  color: #0F62A4;
+  text-decoration: none;
+  cursor: pointer;
+  font-size: 15px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
+.sign-in-link:hover {
+  transform: scale(1.05);
 }
 
-
-/* RESPONSIVE */
-@media (max-width: 900px) {
-  .register-container {
-    flex-direction: column;
-    padding: 2rem;
-  }
-
-  .cv-preview img {
-    width: 75%;
-    max-width: 300px;
-    margin-bottom: 1.5rem;
-  }
-
-  .register-form-container {
-    width: 100%;
-    max-width: 380px;
-  }
+.cv-image {
+  width: 100%;
+  max-width: 400px;
+  box-shadow: -8px 8px 18px rgba(175, 178, 180, 0.83);
 }
+
 </style>
