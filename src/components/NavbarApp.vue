@@ -1,17 +1,53 @@
 <script setup lang="ts">
-import { RouterLink } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
+import CVSidebar from './Sidebar.vue'
+
+const isSidebarOpen = ref(false)
+const showMenu = ref(false)
+const menuRef = ref<HTMLElement | null>(null)
+const router = useRouter()
+
+// -- Sidebar --
+const toggleSidebar = () => (isSidebarOpen.value = !isSidebarOpen.value)
+const closeSidebar = () => (isSidebarOpen.value = false)
+
+// -- Menu 3 points --
+const toggleMenu = (event: MouseEvent) => {
+  event.stopPropagation() // évite de fermer directement
+  showMenu.value = !showMenu.value
+}
+
+const handleClickOutside = (event: MouseEvent) => {
+  if (menuRef.value && !menuRef.value.contains(event.target as Node)) {
+    showMenu.value = false
+  }
+}
+
+onMounted(() => document.addEventListener('click', handleClickOutside))
+onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
+
+const goToHome = () => {
+  router.push('/')
+  showMenu.value = false
+}
+
+const copyLink = () => {
+  navigator.clipboard.writeText(window.location.href)
+  alert('Lien copié dans le presse-papiers !')
+  showMenu.value = false
+}
 </script>
 
 <template>
   <nav class="navbar">
     <div class="navbar-container">
       <div class="navbar-left">
-        <i class="bi bi-grid-3x3-gap-fill icon-menu"></i>
-
-        <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo"/>
+        <i class="bi bi-grid-3x3-gap-fill icon-menu" @click="toggleSidebar"></i>
+        <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo" />
 
         <div class="generate-section">
-          <input type="text" class="form-control input-url" placeholder="Enter your LinkedIn profile URL"/>
+          <input type="text" class="form-control input-url" placeholder="Enter your LinkedIn profile URL" />
           <button class="btn-generate">Generate</button>
         </div>
       </div>
@@ -22,22 +58,51 @@ import { RouterLink } from 'vue-router'
           <span>English</span>
         </div>
 
-        <button class="btn-principale btn-icon">
-          Download
-          <i class="bi bi-download"></i>
-        </button>
+        <div class="menu-actions" ref="menuRef">
+          <button class="btn-principale btn-icon">
+            Download
+            <i class="bi bi-download"></i>
+          </button>
 
-        <!-- Trois points à ajouter plus tard -->      </div>
+          <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>
+
+          <!-- Menu affiché en dehors du flux pour éviter le scoped -->
+          <teleport to="body">
+            <div
+              v-if="showMenu"
+              class="dropdown-menu-global"
+              :style="{ top: `${menuRef?.value?.getBoundingClientRect().bottom + 5}px`, left: `${menuRef?.value?.getBoundingClientRect().right - 150}px` }"
+            >
+              <div class="menu-item" @click="goToHome">
+                <i class="bi bi-house-door"></i> Homepage
+              </div>
+              <div class="menu-item" @click="copyLink">
+                <i class="bi bi-link-45deg"></i> Copier le lien
+              </div>
+            </div>
+          </teleport>
+        </div>
+      </div>
     </div>
   </nav>
+
+  <CVSidebar
+    :is-open="isSidebarOpen"
+    @close="closeSidebar"
+  />
 </template>
 
-
 <style scoped>
-
 .navbar {
   width: 90%;
   margin: 0 auto;
+}
+
+.navbar-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
 }
 
 .navbar-left {
@@ -49,12 +114,22 @@ import { RouterLink } from 'vue-router'
 .icon-menu {
   font-size: 25px;
   cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.icon-menu:hover {
+  color: #0f62a4;
+}
+
+.navbar-logo {
+  height: 40px;
+  cursor: pointer;
 }
 
 .generate-section {
   position: relative;
   width: 600px;
-  border: 2px solid #0F62A4;
+  border: 2px solid #0f62a4;
   border-radius: 8px;
   display: flex;
   align-items: center;
@@ -63,38 +138,24 @@ import { RouterLink } from 'vue-router'
 
 .input-url {
   width: 100%;
-  height: 100%; 
-  padding: 0 110px 0 12px;  
+  height: 100%;
+  padding: 0 110px 0 12px;
   border: none;
   color: #6c757d;
-}
-
-.input-url::placeholder {
-  color: #adb5bd;
-  opacity: 1;
-}
-
-.input-url:focus {
-  box-shadow: 0 0 0 4px rgba(10,102,194,.12);
+  border-radius: 8px;
 }
 
 .btn-generate {
-  background-color: #0F62A4;
+  background-color: #0f62a4;
   color: white;
-  font-family: 'Roboto', sans-serif;
-  font-weight: 500;
   border: none;
   border-radius: 8px;
   padding: 8px 18px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
   position: absolute;
-  right: 0px;
+  right: 0;
   top: 50%;
   transform: translateY(-50%);
-}
-
-.btn-generate:hover {
-  background-color: rgb(24, 87, 151);
+  cursor: pointer;
 }
 
 .navbar-right {
@@ -109,12 +170,88 @@ import { RouterLink } from 'vue-router'
   gap: 6px;
   font-family: 'Roboto', sans-serif;
   color: black;
+  cursor: pointer;
+}
+
+.menu-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+
+.icon-menu-dots {
+  font-size: 22px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s ease;
+}
+
+.icon-menu-dots:hover {
+  color: #0f62a4;
+}
+
+.btn-principale {
+  background-color: #0f62a4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-principale:hover {
+  background-color: rgb(24, 87, 151);
 }
 
 .btn-icon {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 10px;
   padding: 8px 20px;
+}
+</style>
+
+<!-- Styles du menu hors du scoped -->
+<style>
+.dropdown-menu-global {
+  position: absolute;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  width: 160px;
+  z-index: 9999;
+  animation: fadeIn 0.2s ease-in-out;
+  overflow: hidden;
+}
+
+.dropdown-menu-global .menu-item {
+  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-menu-global .menu-item:hover {
+  background-color: #f0f4f9;
+  color: #0f62a4;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 </style>

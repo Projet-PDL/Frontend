@@ -129,8 +129,8 @@ onUnmounted(() => {
     </section>
 
     <!-- Why Choose Section -->
-    <section class="why-choose py-5 position-relative">
-      <div class="why-choose-background"></div>
+    <section class="why-choose py-5 position-relative about-section">
+  
       <div class="container position-relative" style="z-index: 1;">
         <h2 class="text-center fw-bold mb-2">Why Choose LinkedIn2CV?</h2>
         <p class="text-center text-muted mb-5">The best solution for creating your professional CV</p>
@@ -538,6 +538,12 @@ onUnmounted(() => {
 
 .min-vh-50 {
   min-height: 50vh;
+}
+
+.about-section {
+  background-image: url('@/assets/images/about_background.png');
+  background-size: cover;
+  background-position: center;
 }
 
 @media (max-width: 768px) {
