@@ -72,7 +72,7 @@ const copyLink = () => {
                 <i class="bi bi-house-door"></i> Homepage
               </div>
               <div class="menu-item" @click="copyLink">
-                <i class="bi bi-link-45deg"></i> Copier le lien
+                <i class="bi bi-link-45deg"></i> Share
               </div>
             </div>
           </div>
@@ -92,6 +92,7 @@ const copyLink = () => {
   background-color: white;
   width: 90%;
   margin: 0 auto;
+  overflow: visible;
 }
 
 .navbar-container {
@@ -99,6 +100,7 @@ const copyLink = () => {
   justify-content: space-between;
   align-items: center;
   padding: 16px 0;
+  overflow: visible;
 }
 
 .navbar-left {
@@ -158,6 +160,7 @@ const copyLink = () => {
   display: flex;
   align-items: center;
   gap: 20px;
+  overflow: visible;
 }
 
 .language-section {
