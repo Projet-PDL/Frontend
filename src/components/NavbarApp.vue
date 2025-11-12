@@ -5,7 +5,7 @@ import CVSidebar from './Sidebar.vue'
 
 const isSidebarOpen = ref(false)
 const showMenu = ref(false)
-const menuRef = ref<HTMLElement | null>(null)
+const menuButtonRef = ref<HTMLElement | null>(null)
 const router = useRouter()
 
 // -- Sidebar --
@@ -14,12 +14,12 @@ const closeSidebar = () => (isSidebarOpen.value = false)
 
 // -- Menu 3 points --
 const toggleMenu = (event: MouseEvent) => {
-  event.stopPropagation() // évite de fermer directement
+  event.stopPropagation()
   showMenu.value = !showMenu.value
 }
 
 const handleClickOutside = (event: MouseEvent) => {
-  if (menuRef.value && !menuRef.value.contains(event.target as Node)) {
+  if (menuButtonRef.value && !menuButtonRef.value.contains(event.target as Node)) {
     showMenu.value = false
   }
 }
@@ -58,20 +58,16 @@ const copyLink = () => {
           <span>English</span>
         </div>
 
-        <div class="menu-actions" ref="menuRef">
+        <div class="menu-actions">
           <button class="btn-principale btn-icon">
             Download
             <i class="bi bi-download"></i>
           </button>
 
-          <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>
+          <div class="menu-wrapper" ref="menuButtonRef">
+            <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>
 
-          <teleport to="body">
-            <div
-              v-if="showMenu"
-              class="dropdown-menu-global"
-              :style="{ top: `${menuRef?.value?.getBoundingClientRect().bottom + 5}px`, left: `${menuRef?.value?.getBoundingClientRect().right - 150}px` }"
-            >
+            <div v-if="showMenu" class="dropdown-menu-global">
               <div class="menu-item" @click="goToHome">
                 <i class="bi bi-house-door"></i> Homepage
               </div>
@@ -79,7 +75,7 @@ const copyLink = () => {
                 <i class="bi bi-link-45deg"></i> Copier le lien
               </div>
             </div>
-          </teleport>
+          </div>
         </div>
       </div>
     </div>
@@ -128,7 +124,7 @@ const copyLink = () => {
 
 .generate-section {
   position: relative;
-  width: 600px;
+  width: 550px;
   border: 2px solid #0f62a4;
   border-radius: 8px;
   display: flex;
@@ -177,7 +173,12 @@ const copyLink = () => {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.menu-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
 }
 
 .icon-menu-dots {
@@ -212,12 +213,11 @@ const copyLink = () => {
   gap: 10px;
   padding: 8px 20px;
 }
-</style>
 
-<!-- Styles du menu hors du scoped -->
-<style>
 .dropdown-menu-global {
   position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
   background: white;
   border: 1px solid #ddd;
   border-radius: 8px;
