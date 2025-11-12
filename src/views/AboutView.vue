@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import NavbarHome from '@/components/NavbarHome.vue'
+import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
@@ -91,6 +92,7 @@ import NavbarHome from '@/components/NavbarHome.vue'
       </p>
       <RouterLink to="/login" class="btn-principale">Generate your CV now</RouterLink>
     </div>
+    <Footer />
   </div>
 </template>
 

@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -9,6 +8,7 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
+
     {
       path: '/about',
       name: 'about',
@@ -22,7 +22,33 @@ const router = createRouter({
       name: 'contact',
       component: () => import('../views/ContactView.vue'),
     },
+
+    {
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/Login.vue'),
+    },
+
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/Register.vue'),
+    },
+
+    {
+      path: '/creation',
+      name: 'creation',
+      component: () => import('../views/Creation.vue'),
+    },
   ],
+})
+
+router.afterEach(() => {
+  window.scrollTo({
+    top: 0,
+    left: 0,
+    behavior: 'smooth'
+  })
 })
 
 export default router

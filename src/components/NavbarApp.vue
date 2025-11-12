@@ -66,7 +66,6 @@ const copyLink = () => {
 
           <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>
 
-          <!-- Menu affiché en dehors du flux pour éviter le scoped -->
           <teleport to="body">
             <div
               v-if="showMenu"
@@ -94,6 +93,7 @@ const copyLink = () => {
 
 <style scoped>
 .navbar {
+  background-color: white;
   width: 90%;
   margin: 0 auto;
 }
