@@ -2,6 +2,7 @@
 import TheWelcome from '../components/TheWelcome.vue'
 import NavbarHome from '../components/NavbarHome.vue'
 import NavbarApp from '@/components/NavbarApp.vue';
+import Footer from '@/components/Footer.vue';
 
 </script>
 
@@ -9,5 +10,6 @@ import NavbarApp from '@/components/NavbarApp.vue';
   <main>
     <NavbarHome />
     <TheWelcome />
+    <Footer />
   </main>
 </template>

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const email = ref('')
 const currentTestimonial = ref(0)
@@ -57,13 +57,15 @@ const goToTestimonial = (index: number) => {
   currentTestimonial.value = index
 }
 
-const getVisibleTestimonials = () => {
-  const indices = []
+// Solution avec computed property - retourne les objets testimonials directement
+const visibleTestimonials = computed(() => {
+  const result = []
   for (let i = 0; i < 3; i++) {
-    indices.push((currentTestimonial.value + i) % testimonials.length)
+    const index = (currentTestimonial.value + i) % testimonials.length
+    result.push(testimonials[index])
   }
-  return indices
-}
+  return result
+})
 
 onMounted(() => {
   testimonialInterval = window.setInterval(() => {
@@ -109,9 +111,14 @@ onUnmounted(() => {
               </div>
             </div>
             
-            <a href="#" class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm">
-              Get Started Now
-            </a>
+            <RouterLink
+               to="/login"
+               class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm"
+              >
+               Get Started Now
+            </RouterLink>
+
+            
           </div>
 
           <div class="col-lg-6 col-md-12">
@@ -228,39 +235,51 @@ onUnmounted(() => {
 
     <!-- Companies Section -->
     <section class="companies py-5 bg-light">
-      <div class="container">
-        <h4 class="text-center fw-bold mb-2">Our Clients Got Hired At</h4>
-        <p class="text-center text-muted mb-5">Reputable companies that trust our CVs</p>
-        
-        <div class="row justify-content-center align-items-center g-4">
-          <div class="col-6 col-md-2 text-center">
-            <div class="company-logo bg-white rounded p-3 shadow-sm">
-              <h5 class="mb-0 fw-bold">NETFLIX</h5>
-            </div>
-          </div>
-          <div class="col-6 col-md-2 text-center">
-            <div class="company-logo bg-white rounded p-3 shadow-sm">
-              <h5 class="mb-0 fw-bold">amazon</h5>
-            </div>
-          </div>
-          <div class="col-6 col-md-2 text-center">
-            <div class="company-logo bg-white rounded p-3 shadow-sm">
-              <h5 class="mb-0 fw-bold">Google</h5>
-            </div>
-          </div>
-          <div class="col-6 col-md-2 text-center">
-            <div class="company-logo bg-white rounded p-3 shadow-sm">
-              <h5 class="mb-0 fw-bold">Microsoft</h5>
-            </div>
-          </div>
-          <div class="col-6 col-md-2 text-center">
-            <div class="company-logo bg-white rounded p-3 shadow-sm">
-              <h5 class="mb-0 fw-bold">Lidl</h5>
-            </div>
-          </div>
+  <div class="container">
+    <h4 class="text-center fw-bold mb-2">Our Clients Got Hired At</h4>
+    <p class="text-center text-muted mb-5">Reputable companies that trust our CVs</p>
+
+    <div class="row justify-content-center align-items-center g-4">
+      <div class="col-6 col-md-2 text-center">
+        <div class="company-logo bg-white rounded p-3 shadow-sm">
+          <img src="@/assets/images/Companies/logos_netflix.png" alt="Netflix" class="img-fluid" />
         </div>
       </div>
-    </section>
+
+      <div class="col-6 col-md-2 text-center">
+        <div class="company-logo bg-white rounded p-3 shadow-sm">
+          <img src="@/assets/images/Companies/lineicons_amazon.png" alt="Amazon" class="img-fluid" />
+        </div>
+      </div>
+
+      <div class="col-6 col-md-2 text-center">
+        <div class="company-logo bg-white rounded p-3 shadow-sm">
+          <img src="@/assets/images/Companies/logos_google.png" alt="Google" class="img-fluid" />
+        </div>
+      </div>
+
+
+      <div class="col-6 col-md-2 text-center">
+        <div class="company-logo bg-white rounded p-3 shadow-sm">
+          <img src="@/assets/images/Companies/simple-icons_lidl.png" alt="Lidl" class="img-fluid" />
+        </div>
+      </div>
+
+      <div class="col-6 col-md-2 text-center">
+        <div class="company-logo bg-white rounded p-3 shadow-sm">
+          <img src="@/assets/images/Companies/logos_microsoft.png" alt="Microsoft" class="img-fluid" />
+        </div>
+      </div>
+
+      <div class="col-6 col-md-2 text-center">
+        <div class="company-logo bg-white rounded p-3 shadow-sm">
+          <img src="@/assets/images/Companies/simple-icons_edotleclerc.png" alt="LecLerc" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
     <!-- Testimonials Section -->
     <section class="testimonials py-5 bg-custom-blue text-white">
@@ -272,7 +291,7 @@ onUnmounted(() => {
           <div class="testimonial-carousel">
             <transition name="fade" mode="out-in">
               <div :key="currentTestimonial" class="row g-4 justify-content-center">
-                <div class="col-lg-4 col-md-6" v-for="index in getVisibleTestimonials()" :key="index">
+                <div class="col-lg-4 col-md-6" v-for="(testimonial, idx) in visibleTestimonials" :key="idx">
                   <div class="testimonial-card bg-white text-dark rounded-4 p-4 shadow-lg h-100">
                     <div class="mb-3">
                       <i class="bi bi-star-fill text-warning"></i>
@@ -282,15 +301,15 @@ onUnmounted(() => {
                       <i class="bi bi-star-fill text-warning"></i>
                     </div>
                     <p class="mb-4" style="min-height: 100px;">
-                      "{{ testimonials[index].text }}"
+                      "{{ testimonial.text }}"
                     </p>
                     <div class="d-flex align-items-center">
                       <div class="avatar bg-custom-blue text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                         <i class="bi bi-person-fill fs-4"></i>
                       </div>
                       <div>
-                        <h6 class="fw-bold mb-0">{{ testimonials[index].author }}</h6>
-                        <small class="text-muted">{{ testimonials[index].role }}</small>
+                        <h6 class="fw-bold mb-0">{{ testimonial.author }}</h6>
+                        <small class="text-muted">{{ testimonial.role }}</small>
                       </div>
                     </div>
                   </div>
@@ -339,8 +358,9 @@ onUnmounted(() => {
               src="@/assets/images/CV/CV_Login_FR.jpg" 
               alt="CV Example" 
               class="img-fluid rounded-4 shadow-lg w-100"
-              style="max-height: 600px; object-fit: cover;"
+              style="max-height: 600px;  max-width: 400px;  margin-left: 70px;"
             />
+            
           </div>
           <div class="col-lg-6 ps-lg-5">
             <h2 class="display-5 fw-bold mb-4">
@@ -350,9 +370,12 @@ onUnmounted(() => {
             <p class="lead text-muted mb-4">
               Join thousands of professionals who have landed their dream jobs with our professionally designed CVs.
             </p>
-            <a href="#" class="btn btn-custom-blue btn-lg px-5 py-3 rounded-pill shadow-sm text-white">
-              Generate Your CV Now
-            </a>
+            <RouterLink
+               to="/login"
+               class="btn btn-primary btn-lg px-5 py-3 rounded-pill shadow-sm"
+              >
+                Generate Your CV Now
+            </RouterLink>
           </div>
         </div>
       </div>
