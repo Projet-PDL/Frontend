@@ -59,7 +59,7 @@ function handlePhotoUpload(event) {
   if (file) {
     const reader = new FileReader()
     reader.onload = () => {
-      user.value.profile_picture = reader.result // base64 preview
+      user.value.profile_picture = reader.result
     }
     reader.readAsDataURL(file)
   }

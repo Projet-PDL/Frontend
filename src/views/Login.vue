@@ -8,7 +8,7 @@ import { ref } from "vue";
 const email = ref("")
 const password = ref("")
 const showPassword = ref(false)
-const showForgotPassword = ref(false)
+//const showForgotPassword = ref(false)
 const rememberMe = ref(false)
 const showSuccess = ref(false)
 const errorMessage = ref("")
@@ -24,7 +24,7 @@ const handleLogin = () => {
 
 const handleForgotSubmit = (forgotEmail: string) => {
   console.log("Email submitted for reset:", forgotEmail)
-  showForgotPassword.value = false
+  //showForgotPassword.value = false
   showSuccess.value = true
 
   setTimeout(() => {
@@ -73,7 +73,7 @@ const handleForgotSubmit = (forgotEmail: string) => {
             <input type="checkbox" id="remember" class="form-check-input" v-model="rememberMe" />
             <label for="remember" class="form-check-label">Remember for 30 days</label>
           </div>
-          <span class="forgot-link" @click="showForgotPassword = true">Forgot password?</span>
+          <!-- <span class="forgot-link" @click="showForgotPassword = true">Forgot password?</span> -->
         </div>
 
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
