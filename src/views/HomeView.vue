@@ -8,7 +8,6 @@ import NavbarApp from '@/components/NavbarApp.vue';
 <template>
   <main>
     <NavbarHome />
-    <NavbarApp />
     <TheWelcome />
   </main>
 </template>
