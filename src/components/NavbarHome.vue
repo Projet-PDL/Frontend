@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import LanguageSelector from './LanguageSelector.vue'
 </script>
 
 <template>
@@ -9,8 +10,8 @@ import { RouterLink } from 'vue-router'
 
       <ul class="navbar-links">
         <li>
-          <i class="bi bi-globe"></i>
-          <span>English</span>
+          <span><LanguageSelector /><span/>
+          
         </li>
 
         <li>
