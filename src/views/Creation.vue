@@ -2,6 +2,8 @@
     import Navbar from '@/components/NavbarApp.vue'
     import Footer from '@/components/Footer.vue'
     import LeftPanel from '@/components/CreationLeftPanel.vue'
+    import Rightpanel from '@/components/CreationRightPanel.vue'
+    
 </script>
 
 <template>
@@ -12,7 +14,7 @@
       <LeftPanel class="left-panel" />
       
       <!-- Rightpanel vient ici -->
-      <div class ="right-panel"></div>
+      <Rightpanel class ="right-panel"></Rightpanel>
     </div>
 
     <Footer class="footer" />

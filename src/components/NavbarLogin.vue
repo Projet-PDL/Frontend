@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
+import LanguageSelector from './LanguageSelector.vue'
 </script>
 
+const showDropdown = ref(false)
+
+const languages = [
+  { code: 'en', label: 'English' },
+  { code: 'fr', label: 'Français' },
+  { code: 'es', label: 'Español' },
+  { code: 'ar', label: 'العربية' },
+]
 <template>
   <nav class="navbar">
     <div class="navbar-container">
@@ -9,8 +18,7 @@ import { RouterLink } from 'vue-router'
 
       <ul class="navbar-links">
         <li>
-          <i class="bi bi-globe"></i>
-          <span>English</span>
+          <span><LanguageSelector /></span>
         </li>
 
         <li>
