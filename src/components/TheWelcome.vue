@@ -355,10 +355,10 @@ onUnmounted(() => {
         <div class="row align-items-center g-4">
           <div class="col-lg-6 mb-4 mb-lg-0">
             <img 
-              src="@/assets/images/CV/CV_Login_FR.jpg" 
+              src="@/assets/images/CV/CV_Login_EN.jpg" 
               alt="CV Example" 
               class="img-fluid rounded-4 shadow-lg w-100"
-              style="max-height: 600px;  max-width: 400px;  margin-left: 70px;"
+              style="max-height: 600px;  max-width: 400px;  margin-left: 90px;"
             />
             
           </div>
