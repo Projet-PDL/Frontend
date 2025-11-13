@@ -2,11 +2,13 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import CVSidebar from './Sidebar.vue'
+import { useAuthStore } from '@/stores/auth.store.ts'
 
 const isSidebarOpen = ref(false)
 const showMenu = ref(false)
 const menuButtonRef = ref<HTMLElement | null>(null)
 const router = useRouter()
+const auth = useAuthStore()
 
 // -- Sidebar --
 const toggleSidebar = () => (isSidebarOpen.value = !isSidebarOpen.value)
@@ -36,6 +38,11 @@ const copyLink = () => {
   navigator.clipboard.writeText(window.location.href)
   alert('Lien copié dans le presse-papiers !')
   showMenu.value = false
+}
+
+const logout = () => {
+  auth.logout()
+  router.push('/')
 }
 </script>
 
@@ -73,6 +80,9 @@ const copyLink = () => {
               </div>
               <div class="menu-item" @click="copyLink">
                 <i class="bi bi-link-45deg"></i> Share
+              </div>
+              <div class="menu-item" style="color: red" @click="logout">
+                <i class="bi bi-box-arrow-left"></i> Log out
               </div>
             </div>
           </div>
