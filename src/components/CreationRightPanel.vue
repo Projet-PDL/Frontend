@@ -4,11 +4,11 @@ import { ref } from 'vue'
 // ✅ Utilise `new URL(..., import.meta.url).href` pour bien résoudre le chemin des images
 const templates = [
   {
-    name: 'CV avec photo',
+    name: 'CV with photo',
     src: new URL('@/assets/images/CV/CV_Login_EN.jpg', import.meta.url).href,
   },
   {
-    name: 'CV sans photo',
+    name: 'CV without photo',
     src: new URL('@/assets/images/CV/CV_SansPhoto_EN.jpg', import.meta.url).href,
   },
   {
@@ -56,7 +56,7 @@ const selectTemplate = (template) => {
   align-items: center;
   background: white;
   border-radius: 10px;
-  padding: 20px;
+  padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -64,7 +64,7 @@ const selectTemplate = (template) => {
 .template-list {
   display: flex;
   justify-content: center;
-  gap: 15px;
+  gap: 60px;
   margin-bottom: 20px;
   flex-wrap: wrap;
 }
@@ -75,47 +75,50 @@ const selectTemplate = (template) => {
   align-items: center;
   cursor: pointer;
   border: 2px solid transparent;
-  border-radius: 8px;
   transition: all 0.3s ease;
-  background: #f8f8f8;
   padding: 8px;
 }
 
-.template-item:hover {
-  border-color: #2a2a8f;
-  background: #eef0ff;
+.template-item:hover, .template-item.active {
+  transform: scale(1.20);
 }
 
-.template-item.active {
-  border-color: #2a2a8f;
-  background: #e1e4ff;
+.template-item img:hover, .template-item.active img{
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.39);
+  border: 1px solid black;
+}
+
+.template-item p:hover, .template-item.active p{
+  color: black;
 }
 
 .template-item img {
-  width: 90px;
-  height: 120px;
+  width: 100px;
+  height: 140px;
   object-fit: cover;
-  border-radius: 6px;
+  border: 1px solid #333333aa;
   margin-bottom: 5px;
 }
 
 .template-item p {
   font-size: 0.8rem;
-  color: #333;
+  color: #333333aa;
   margin: 0;
 }
 
 /* Zone d'affichage */
 .preview-area {
-  width: 100%;
+  width: 90%;
   background: #fff;
-  border-radius: 10px;
+  border-radius: 8px;
+  border: 2px solid #33333333;
   overflow: hidden;
-  box-shadow: inset 0 0 10px rgba(0,0,0,0.05);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 700px;
+  
 }
 
 .preview-image {

@@ -10,7 +10,7 @@ import LanguageSelector from './LanguageSelector.vue'
 
       <ul class="navbar-links">
         <li>
-          <span><LanguageSelector /><span/>
+          <span><LanguageSelector /></span>
           
         </li>
 
