@@ -331,8 +331,9 @@ const location = computed(() => {
 }
 
 .right {
+  width: 100%;
   background: #C4CBE6;
-  padding: 18px;
+  padding: 20px;
   flex-grow: 1;
   display: flex;
   flex-direction: column;
