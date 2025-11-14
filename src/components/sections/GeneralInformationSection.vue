@@ -1,27 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { profile, user } = storeToRefs(cv)
 const isEditing = ref(false)
-
-const user = ref({
-  profile_picture: '',
-})
-
-const profile = ref({ 
-    first_name: '',
-    last_name: '',
-    headline: '',
-    email: '',
-    birth_date: '',
-    phone: '',
-    street: '',
-    city: '',
-    postal_code: '',
-    region: '',
-    country: '',
-    website_url: '',
-    availability: ''
-})
 
 const full_name = computed({
   get: () => {
@@ -52,7 +36,6 @@ const location = computed({
     profile.value.city = value
   }
 })
-
 
 function handlePhotoUpload(event) {
   const file = event.target.files[0]

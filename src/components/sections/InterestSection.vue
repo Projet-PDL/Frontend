@@ -1,17 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { interests } = storeToRefs(cv)
 const isOpen = ref(false)
 const isEditing = ref(false)
 const editingIndex = ref(null)
 
-const interests = ref([])
-
 const tempInterest = ref({
   name: '',
-  category: '',
-  position: null
+  position: 1
 })
 
 const emit = defineEmits(['open'])
@@ -21,7 +22,10 @@ defineProps({ isActive: Boolean })
 const startAdd = () => {
   isEditing.value = true
   editingIndex.value = null
-  tempInterest.value = { name: '', category: '', position: interests.value.length + 1 }
+  tempInterest.value = { 
+    name: '',
+    position: interests.value.length + 1 
+  }
 }
 
 const startEdit = (index) => {
@@ -32,7 +36,7 @@ const startEdit = (index) => {
 
 const deleteInterest = (index) => {
   interests.value.splice(index, 1)
-  interests.value.forEach((interest, i) => (interest.position = i + 1))
+  updatePositions()
   isEditing.value = false
 }
 
@@ -40,8 +44,12 @@ const saveInterest = () => {
   if (editingIndex.value !== null)
     interests.value[editingIndex.value] = { ...tempInterest.value }
   else
-    interests.value.push({ ...tempInterest.value, position: interests.value.length + 1 })
+    interests.value.push({ 
+      ...tempInterest.value,
+      position: interests.value.length + 1
+    })
 
+  updatePositions()
   isEditing.value = false
   editingIndex.value = null
 }
@@ -83,10 +91,6 @@ const updatePositions = () => {
         <div class="form-row">
           <label>Name</label>
           <input v-model="tempInterest.name" class="input-field input-creation" placeholder="e.g. Photography, Traveling, Reading" />
-        </div>
-        <div class="form-row">
-          <label>Category</label>
-          <input v-model="tempInterest.category" class="input-field input-creation" placeholder="e.g. Art, Sports, Culture" />
         </div>
         <button type="submit" class="btn-principale btn-creation">Done</button>
       </form>

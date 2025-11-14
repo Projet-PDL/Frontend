@@ -1,14 +1,20 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { languages } = storeToRefs(cv)
 const isOpen = ref(false)
 const isEditing = ref(false)
 const editingIndex = ref(null)
 
-const languages = ref([])
-
-const tempLanguage = ref({ language_name: '', proficiency_level: '', position: null })
+const tempLanguage = ref({
+  language_name: '',
+  proficiency_level: '',
+  position: 1
+})
 
 const emit = defineEmits(['open'])
 const openSection = () => emit('open')
@@ -17,7 +23,11 @@ defineProps({ isActive: Boolean })
 const startAdd = () => {
   isEditing.value = true
   editingIndex.value = null
-  tempLanguage.value = { language_name: '', proficiency_level: '', position: languages.value.length + 1 }
+  tempLanguage.value = {
+    language_name: '',
+    proficiency_level: '',
+    position: languages.value.length + 1
+  }
 }
 
 const startEdit = (index) => {
@@ -28,7 +38,7 @@ const startEdit = (index) => {
 
 const deleteLanguage = (index) => {
   languages.value.splice(index, 1)
-  languages.value.forEach((lang, i) => (lang.position = i + 1))
+  updatePositions()
   isEditing.value = false
 }
 
@@ -36,8 +46,12 @@ const saveLanguage = () => {
   if (editingIndex.value !== null)
     languages.value[editingIndex.value] = { ...tempLanguage.value }
   else
-    languages.value.push({ ...tempLanguage.value, position: languages.value.length + 1 })
+    languages.value.push({
+      ...tempLanguage.value,
+      position: languages.value.length + 1
+    })
 
+  updatePositions()
   isEditing.value = false
   editingIndex.value = null
 }

@@ -64,7 +64,6 @@ export interface SocialNetworkItem {
 
 export interface InterestItem {
   name: string;
-  category: string;
   position: number;
 }
 
@@ -93,7 +92,7 @@ export const useCvStore = defineStore("cv", () => {
     professional_summary: "",
   });
   
-  const education = ref<EducationItem[]>([]);
+  const educations = ref<EducationItem[]>([]);
 
   const experiences = ref<ExperienceItem[]>([]);
 
@@ -101,7 +100,7 @@ export const useCvStore = defineStore("cv", () => {
   
   const skills = ref<SkillItem[]>([]);
 
-  const social_networks = ref<SocialNetworkItem[]>([]);
+  const socialNetworks = ref<SocialNetworkItem[]>([]);
 
   const interests = ref<InterestItem[]>([]);
 
@@ -109,11 +108,11 @@ export const useCvStore = defineStore("cv", () => {
     profile,
     user,
     summary,
-    education,
+    educations,
     experiences,
     languages,
     skills,
-    social_networks,
+    socialNetworks,
     interests,
   };
 });

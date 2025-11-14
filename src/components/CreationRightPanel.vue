@@ -1,26 +1,31 @@
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import CVPhoto from '@/components/cv_preview/CVPhoto.vue'
+import CVWithoutPhoto from '@/components/cv_preview/CVWithoutPhoto.vue'
+import CVATS from '@/components/cv_preview/CVATS.vue'
 
-// ✅ Utilise `new URL(..., import.meta.url).href` pour bien résoudre le chemin des images
 const templates = [
   {
     name: 'CV with photo',
     src: new URL('@/assets/images/CV/CV_Login_EN.jpg', import.meta.url).href,
+    component: CVPhoto,
   },
   {
     name: 'CV without photo',
     src: new URL('@/assets/images/CV/CV_SansPhoto_EN.jpg', import.meta.url).href,
+    component: CVWithoutPhoto,
   },
   {
     name: 'CV ATS',
     src: new URL('@/assets/images/CV/CV_ATS_EN.jpg', import.meta.url).href,
+    component: CVATS,
   },
 ]
 
-// Le modèle actuellement sélectionné
 const selectedTemplate = ref(templates[0])
 
-// Fonction pour changer de modèle
+const activeComponent = computed(() => selectedTemplate.value.component)
+
 const selectTemplate = (template) => {
   selectedTemplate.value = template
 }
@@ -44,7 +49,9 @@ const selectTemplate = (template) => {
 
     <!-- Zone d'affichage du modèle sélectionné -->
     <div class="preview-area">
-      <img :src="selectedTemplate.src" alt="Aperçu du CV" class="preview-image" />
+      <div class="preview-scale">
+        <component :is="activeComponent" />
+      </div>
     </div>
   </div>
 </template>
@@ -107,24 +114,20 @@ const selectTemplate = (template) => {
   margin: 0;
 }
 
-/* Zone d'affichage */
 .preview-area {
-  width: 90%;
-  background: #fff;
-  border-radius: 8px;
+  width: 83%;
+  height: 690px;
   border: 2px solid #33333333;
+  border-radius: 8px;
   overflow: hidden;
   display: flex;
   justify-content: center;
-  align-items: center;
-  min-height: 700px;
-  
+  align-items: start;
 }
 
-.preview-image {
-  width: 95%;
-  height: auto;
-  object-fit: contain;
-  border-radius: 8px;
+.preview-scale {
+  transform: scale(0.61);
+  transform-origin: top center;
 }
+
 </style>

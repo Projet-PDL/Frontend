@@ -21,7 +21,6 @@
   </div>
 </template>
 
-
 <style scoped>
 
 .app-container {

@@ -1,16 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { skills } = storeToRefs(cv)
 const isEditing = ref(false)
 const editingIndex = ref(null)
-
-const skills = ref([])
 
 const tempSkill = ref({
   skill_name: '',
   skill_description: '',
-  position: null
+  position: 1
 })
 
 const emit = defineEmits(['open'])
@@ -20,7 +22,11 @@ const openSection = () => emit('open')
 const startAdd = () => {
   isEditing.value = true
   editingIndex.value = null
-  tempSkill.value = { skill_name: '', skill_description: '', position: skills.value.length + 1 }
+  tempSkill.value = {
+    skill_name: '',
+    skill_description: '',
+    position: skills.value.length + 1
+  }
 }
 
 const startEdit = (index) => {
@@ -31,7 +37,7 @@ const startEdit = (index) => {
 
 const deleteSkill = (index) => {
   skills.value.splice(index, 1)
-  skills.value.forEach((s, i) => (s.position = i + 1))
+  updatePositions()
   isEditing.value = false
 }
 
@@ -39,8 +45,12 @@ const saveSkill = () => {
   if (editingIndex.value !== null)
     skills.value[editingIndex.value] = { ...tempSkill.value }
   else
-    skills.value.push({ ...tempSkill.value, position: skills.value.length + 1 })
+    skills.value.push({
+      ...tempSkill.value,
+      position: skills.value.length + 1
+    })
 
+  updatePositions()
   isEditing.value = false
   editingIndex.value = null
 }
