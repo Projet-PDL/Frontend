@@ -3,12 +3,14 @@
 
     <!-- HEADER -->
     <header class="cv-header">
-         <div class="cv-sidebar1">
-         </div>
+      
+        <aside class="cv-sidebar1"/>
+         
       <div>
         <h4>{{ cvData.name }}</h4>
         <h6>{{ cvData.title }}</h6>
       </div>
+      
 
       <div>
         <p>📍 {{ cvData.location }}</p>
@@ -232,7 +234,7 @@ const toggleSection = (section) => {
 .cv-container {
   width: 900px;
   margin: 0 auto;
-  background: white;
+  background: ;
   box-shadow: 0 5px 25px rgba(0, 0, 0, 0.15);
   font-family: "Poppins", sans-serif;
   color: #333;

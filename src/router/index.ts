@@ -30,6 +30,12 @@ const router = createRouter({
     },
 
     {
+      path: '/cv',
+      name: 'CVPhoto',
+      component: () => import('../views/CVPhoto.vue'),
+    },
+
+    {
       path: '/register',
       name: 'register',
       component: () => import('../views/Register.vue'),
