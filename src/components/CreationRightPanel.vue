@@ -65,7 +65,7 @@ const selectTemplate = (template) => {
   display: flex;
   justify-content: center;
   gap: 60px;
-  margin-bottom: 20px;
+  margin-bottom: 14px;
   flex-wrap: wrap;
 }
 

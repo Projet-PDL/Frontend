@@ -46,7 +46,7 @@
 
 .right-panel {
   width: 45%;
-  min-height: 819px;
+  min-height: 815px;
   background: white;
   border-radius: 10px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
