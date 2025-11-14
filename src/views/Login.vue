@@ -1,37 +1,45 @@
 <script setup lang="ts">
 import NavbarLogin from '@/components/NavbarLogin.vue'
 import Footer from '@/components/Footer.vue'
-import ForgotPassword from "@/components/ForgotPassword.vue";
+import ForgotPassword from '@/components/ForgotPassword.vue'
 
-import { ref } from "vue";
+import { computed, ref } from 'vue'
+import { useAuthStore } from '@/stores/auth.store.ts'
+import { useRoute, useRouter } from 'vue-router'
 
-const email = ref("")
-const password = ref("")
+const email = ref('')
+const password = ref('')
 const showPassword = ref(false)
-//const showForgotPassword = ref(false)
+const showForgotPassword = ref(false)
 const rememberMe = ref(false)
 const showSuccess = ref(false)
-const errorMessage = ref("")
 
-const handleLogin = () => {
-  if (!email.value || !password.value) {
-    errorMessage.value = "Email and password are required!"
-    return
-  }
+const auth = useAuthStore()
+const loading = computed(() => auth.loading)
+const errorMessage = computed(() => auth.error)
 
-  //L'envoi de l'email et password au back on le fait lundi
+const route = useRoute()
+const router = useRouter()
+
+// Validation minimale côté front
+const isFormValid = computed(() => {
+  return email.value.trim() !== '' && password.value.length >= 8
+})
+
+async function handleLogin () {
+  if (!isFormValid.value) return
+
+  try {
+    await auth.login(email.value, password.value)
+    await router.push('/creation')
+  } catch {}
 }
 
 const handleForgotSubmit = (forgotEmail: string) => {
-  console.log("Email submitted for reset:", forgotEmail)
-  //showForgotPassword.value = false
+  console.log('Email submitted for reset:', forgotEmail)
   showSuccess.value = true
-
-  setTimeout(() => {
-    showSuccess.value = false
-  }, 3000)
+  setTimeout(() => { showSuccess.value = false }, 3000)
 }
-
 </script>
 
 <template>
@@ -42,26 +50,26 @@ const handleForgotSubmit = (forgotEmail: string) => {
 
     <section class="login-section container">
       <div class="login-card">
-        <img
-          src="../assets/images/Logo.png"
-            alt="Logo LinkedIn2CV"
-          class="login-logo"
-        />
+        <img src="../assets/images/Logo.png" alt="Logo LinkedIn2CV" class="login-logo" />
 
         <h2 class="login-title">Sign in</h2>
 
         <input
-            v-model="email"
-            type="email"
-            class="input-field"
-            placeholder="Email"
+          v-model="email"
+          type="email"
+          class="input-field form-control"
+          placeholder="Email"
+          required
         />
+
         <div class="password-field">
-          <input 
+          <input
             v-model="password"
             :type="showPassword ? 'text' : 'password'"
-            class="input-field"
+            class="input-field form-control"
             placeholder="Password"
+            minlength="8"
+            required
           />
           <span class="toggle-password" @click="showPassword = !showPassword">
             {{ showPassword ? 'Hide' : 'Show' }}
@@ -73,12 +81,18 @@ const handleForgotSubmit = (forgotEmail: string) => {
             <input type="checkbox" id="remember" class="form-check-input" v-model="rememberMe" />
             <label for="remember" class="form-check-label">Remember for 30 days</label>
           </div>
-          <!-- <span class="forgot-link" @click="showForgotPassword = true">Forgot password?</span> -->
         </div>
 
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
 
-        <button class="btn-principale" @click="handleLogin">Sign in</button>
+        <button
+          class="btn-principale btn btn-primary"
+          :disabled="loading || !isFormValid"
+          @click="handleLogin"
+        >
+          <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+          Sign in
+        </button>
 
         <div class="or-line">
           <div class="line"></div>
@@ -88,7 +102,7 @@ const handleForgotSubmit = (forgotEmail: string) => {
 
         <button type="button" class="btn-google">
           <img src="@/assets/images/Google.png" alt="Google icon" class="google-icon" />
-          <span>Sign in with Google</span>  
+          <span>Sign in with Google</span>
         </button>
 
         <div class="register-link">
@@ -96,7 +110,12 @@ const handleForgotSubmit = (forgotEmail: string) => {
           <RouterLink to="/register" class="Sign-up-link">Sign up</RouterLink>
         </div>
       </div>
-      <img src="../assets/images/CV/CV_Login_EN.jpg" alt="CV_Login_EN" class="cv-image"/>
+
+      <img
+        src="../assets/images/CV/CV_Login_EN.jpg"
+        alt="CV_Login_EN"
+        class="cv-image"
+      />
     </section>
 
     <transition name="fade-popup">
@@ -106,22 +125,20 @@ const handleForgotSubmit = (forgotEmail: string) => {
         @forgotPassword="handleForgotSubmit"
       />
     </transition>
-    <div v-if="showSuccess" class="success-toast">
-      Email sent! Check your inbox.
-    </div>
+
+    <div v-if="showSuccess" class="success-toast">Email sent! Check your inbox.</div>
 
     <Footer />
   </div>
 </template>
 
 <style scoped>
-
 section {
   margin: 100px auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-items: center; 
+  justify-items: center;
   gap: 50px;
 }
 
@@ -161,11 +178,11 @@ section {
   top: 38%;
   transform: translateY(-50%);
   font-size: 14px;
-  color: #0F62A4;
+  color: #0f62a4;
   cursor: pointer;
 }
 
-.remember-password-group{
+.remember-password-group {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -173,28 +190,28 @@ section {
   font-size: 13px;
 }
 
-.form-check-input{
+.form-check-input {
   border: 1px solid #9b9b9bff;
 }
 
 .forgot-link {
   text-decoration: none;
   font-weight: 600;
-  color: #0F62A4;
+  color: #0f62a4;
   cursor: pointer;
 }
 
-.forgot-link:hover{
-  text-decoration:none;
+.forgot-link:hover {
+  text-decoration: none;
   transform: scale(1.05);
 }
 
-.btn-principale{
+.btn-principale {
   width: 100%;
   text-align: center;
 }
 
-.or-line{
+.or-line {
   display: flex;
   align-items: center;
   margin: 20px 0 20px;
@@ -212,7 +229,7 @@ section {
   color: #7e7e7eff;
 }
 
-.google-icon{
+.google-icon {
   height: 20px;
 }
 
@@ -229,7 +246,9 @@ section {
   align-items: center;
   gap: 10px;
   justify-content: center;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
   line-height: 0;
 }
 
@@ -237,31 +256,31 @@ section {
   transform: scale(1.05);
 }
 
-.register-link{
+.register-link {
   display: flex;
   align-items: center;
   gap: 15px;
   justify-content: center;
-  margin:  25px 0 0;
+  margin: 25px 0 0;
   font-size: 13px;
 }
 
-.signup-text{
-  color: #8E8E8E;
+.signup-text {
+  color: #8e8e8e;
 }
 
-.Sign-up-link{
+.Sign-up-link {
   text-decoration: none;
-  color: #0F62A4;
+  color: #0f62a4;
   cursor: pointer;
 }
 
-.Sign-up-link:hover{
-  text-decoration:none;
+.Sign-up-link:hover {
+  text-decoration: none;
   transform: scale(1.05);
 }
 
-.cv-image{
+.cv-image {
   width: 100%;
   max-width: 400px;
   box-shadow: -8px 8px 18px rgba(175, 178, 180, 0.83);
@@ -277,5 +296,4 @@ section {
   opacity: 0;
   transform: translateY(-15px);
 }
-
 </style>

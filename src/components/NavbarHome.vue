@@ -11,7 +11,6 @@ import LanguageSelector from './LanguageSelector.vue'
       <ul class="navbar-links">
         <li>
           <span><LanguageSelector /></span>
-          
         </li>
 
         <li>
@@ -27,9 +26,8 @@ import LanguageSelector from './LanguageSelector.vue'
             <span>About</span>
           </RouterLink>
         </li>
-
         <li>
-          <RouterLink to="/login" class="btn-principale">Sign Up</RouterLink>
+          <RouterLink to="/login" class="btn-principale">Sign In</RouterLink>
         </li>
       </ul>
     </div>

@@ -1,39 +1,56 @@
 <script setup lang="ts">
 import NavbarLogin from '@/components/NavbarLogin.vue'
 import Footer from '@/components/Footer.vue'
-import { ref } from "vue"
-import { useRouter } from "vue-router"
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth.store.ts'
 
 const router = useRouter()
+const auth = useAuthStore()
+const loading = computed(() => auth.loading)
+const error = computed(() => auth.error)
 
-const first_name = ref("")
-const last_name = ref("")
-const email = ref("")
-const password = ref("")
-const confirmPassword = ref("")
+const first_name = ref('')
+const last_name = ref('')
+const email = ref('')
+const password = ref('')
+const confirmPassword = ref('')
 const showPassword = ref(false)
 const showConfirmPassword = ref(false)
 const showSuccess = ref(false)
-const errorMessage = ref("")
+const errorMessage = ref('')
 
-const handleRegister = () => {
-  if (!first_name.value || !last_name.value || !email.value || !password.value || !confirmPassword.value) {
-    errorMessage.value = "All fields are required!"
-    return
-  }
+async function handleRegister () {
+  try {
+    if (
+      !first_name.value ||
+      !last_name.value ||
+      !email.value ||
+      !password.value ||
+      !confirmPassword.value
+    ) {
+      errorMessage.value = 'All fields are required!'
+      return
+    }
 
-  if (password.value !== confirmPassword.value) {
-    errorMessage.value = "Passwords do not match!"
-    return
-  }
+    if (password.value !== confirmPassword.value) {
+      errorMessage.value = 'Passwords do not match!'
+      return
+    }
 
-  errorMessage.value = ""
-  showSuccess.value = true
+    const name = first_name.value + ' ' + last_name.value
 
-  setTimeout(() => {
-    showSuccess.value = false
-    router.push("/creation")
-  }, 1500)
+    await auth.register(name, email.value, password.value)
+
+    errorMessage.value = ''
+    showSuccess.value = true
+
+    setTimeout(() => {
+      showSuccess.value = false
+      router.push('/creation')
+    }, 1500)
+  } catch {}
+
 }
 </script>
 
@@ -47,7 +64,6 @@ const handleRegister = () => {
       <img src="../assets/images/CV/CV_Login_EN.jpg" class="cv-image" />
 
       <div class="register-card">
-
         <h2 class="register-title">Create account</h2>
 
         <button type="button" class="google-circle-btn">
@@ -55,20 +71,30 @@ const handleRegister = () => {
         </button>
 
         <p>or use email for registration</p>
-        
+
         <input v-model="first_name" type="text" class="input-field" placeholder="First name" />
         <input v-model="last_name" type="text" class="input-field" placeholder="Last name" />
         <input v-model="email" type="email" class="input-field" placeholder="Email" />
 
         <div class="password-field">
-          <input :type="showPassword ? 'text' : 'password'" v-model="password" class="input-field" placeholder="Password" />
+          <input
+            :type="showPassword ? 'text' : 'password'"
+            v-model="password"
+            class="input-field"
+            placeholder="Password"
+          />
           <span class="toggle-password" @click="showPassword = !showPassword">
             {{ showPassword ? 'Hide' : 'Show' }}
           </span>
         </div>
 
         <div class="password-field">
-          <input :type="showConfirmPassword ? 'text' : 'password'" v-model="confirmPassword" class="input-field" placeholder="Confirm Password" />
+          <input
+            :type="showConfirmPassword ? 'text' : 'password'"
+            v-model="confirmPassword"
+            class="input-field"
+            placeholder="Confirm Password"
+          />
           <span class="toggle-password" @click="showConfirmPassword = !showConfirmPassword">
             {{ showConfirmPassword ? 'Hide' : 'Show' }}
           </span>
@@ -80,8 +106,6 @@ const handleRegister = () => {
 
         <RouterLink to="/login" class="sign-in-link">Already have an account?</RouterLink>
       </div>
-
-      
     </section>
 
     <div v-if="showSuccess" class="success-toast">Account created!</div>
@@ -91,13 +115,12 @@ const handleRegister = () => {
 </template>
 
 <style scoped>
-
 .register-section {
   margin: 100px auto;
   display: grid;
   grid-template-columns: 1fr 1fr;
   align-items: center;
-  justify-items: center; 
+  justify-items: center;
   gap: 50px;
 }
 
@@ -109,7 +132,7 @@ const handleRegister = () => {
 }
 
 .register-title {
-  color: #0F62A4;
+  color: #0f62a4;
   font-weight: 700;
   margin: 15px 0;
   font-size: 40px;
@@ -139,7 +162,7 @@ const handleRegister = () => {
   height: 24px;
 }
 
-p{
+p {
   text-align: center;
   color: #7e7e7eff;
 }
@@ -160,7 +183,7 @@ p{
   top: 38%;
   transform: translateY(-50%);
   font-size: 14px;
-  color: #0F62A4;
+  color: #0f62a4;
   cursor: pointer;
 }
 
@@ -170,7 +193,7 @@ p{
   margin-bottom: 10px;
 }
 
-.btn-principale{
+.btn-principale {
   width: 100%;
   margin-bottom: 20px;
 }
@@ -178,7 +201,7 @@ p{
 .sign-in-link {
   display: block;
   text-align: center;
-  color: #0F62A4;
+  color: #0f62a4;
   text-decoration: none;
   cursor: pointer;
   font-size: 15px;
@@ -193,5 +216,4 @@ p{
   max-width: 400px;
   box-shadow: -8px 8px 18px rgba(175, 178, 180, 0.83);
 }
-
 </style>
