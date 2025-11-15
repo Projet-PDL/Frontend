@@ -1,0 +1,128 @@
+{
+  "profile": {
+    "first_name": "Noelis",
+    "last_name": "Mané",
+    "headline": "Full Stack Web Developer",
+    "email": "noelis.mané@linkedin2cv.fr",
+    "birth_date": "2004-07-25",
+    "phone": "06 02 19 02 49",
+    "street": "",
+    "city": "Rennes",
+    "postal_code": "35000",
+    "region": "",
+    "country": "France",
+    "website_url": "Linkedin2CV.fr",
+    "availability": "Open to remote work"
+  },
+
+  "user": {
+    "profile_picture": ""
+  },
+
+  "summary": {
+    "professional_summary": "Passionate about web technologies and automation, I develop solutions that transform data into interactive and user-friendly experiences. Co-creator of LinkedIn2CV, a tool that automatically generates professional resumes from LinkedIn profiles."
+  },
+
+  "educations": [
+    {
+      "degree": "Master’s Degree in MIAGE",
+      "school": "University of Rennes",
+      "start_date": "2025-09",
+      "end_date": "",
+      "description": "",
+      "position": 1
+    },
+    {
+      "degree": "Bachelor’s Degree in MIAGE",
+      "school": "University of Rennes",
+      "start_date": "2024-09",
+      "end_date": "2025-07",
+      "description": "",
+      "position": 2
+    }
+  ],
+
+  "experiences": [
+    {
+      "title": "Web Developer",
+      "company": "LinkedIn2CV",
+      "start_date": "2025-09",
+      "end_date": "",
+      "location": "Rennes",
+      "description": "Designed and integrated the login page using React and TailwindCSS.\nConnected to the LinkedIn API to extract and format user profile data.\nCollaborated with a team of 6 developers using GitHub.\nBuilt a responsive and exportable CV template (PDF generation).",
+      "position": 1
+    },
+    {
+      "title": "Web Development Intern",
+      "company": "TechForge",
+      "start_date": "2025-04",
+      "end_date": "2025-07",
+      "location": "Rennes",
+      "description": "Developed analytical dashboards using React and Node.js.\nOptimized page loading time by 40%.\nContributed to the redesign of the company’s design system.",
+      "position": 2
+    },
+    {
+      "title": "University Project - Reservation Management System",
+      "company": "University of Rennes",
+      "start_date": "2023-02",
+      "end_date": "2023-05",
+      "location": "Rennes",
+      "description": "Conducted UML analysis and designed an automated booking system.\nImplemented a RESTful architecture for the back-end.",
+      "position": 3
+    }
+  ],
+
+  "languages": [
+    {
+      "language_name": "English",
+      "proficiency_level": "Native language",
+      "position": 1
+    },
+    {
+      "language_name": "French",
+      "proficiency_level": "Intermediate (B2)",
+      "position": 2
+    }
+  ],
+
+  "skills": [
+    {
+      "skill_name": "Web Front-End",
+      "skill_description": "React.js, HTML5, CSS3, JavaScript (ES6), TailwindCSS, Figma",
+      "position": 1
+    },
+    {
+      "skill_name": "Back-End",
+      "skill_description": "Node.js, Express.js, Java (Spring Boot), Python (FastAPI)",
+      "position": 2
+    },
+    {
+      "skill_name": "Databases",
+      "skill_description": "MongoDB, MySQL, PostgreSQL",
+      "position": 3
+    },
+    {
+      "skill_name": "Tools & DevOps",
+      "skill_description": "Git/GitHub, Docker, Postman, VS Code",
+      "position": 4
+    },
+    {
+      "skill_name": "Other",
+      "skill_description": "API REST, OAuth Authentication (LinkedIn API), UML Design, Agile Methods",
+      "position": 5
+    }
+  ],
+
+  "interests": [
+    { "name": "Design UI/UX", "position": 1 },
+    { "name": "Generative AI", "position": 2 }
+  ],
+
+  "socialNetworks": [
+    {
+      "platform": "LinkedIn",
+      "username": "Linkedin2CV",
+      "position": 1
+    }
+  ]
+}
