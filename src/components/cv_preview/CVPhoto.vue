@@ -349,7 +349,7 @@ const location = computed(() => {
 }
 
 .right section{
-  margin-bottom: 15px;
+  margin-bottom: 18px;
 }
 
 .right-title {
