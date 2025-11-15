@@ -2,8 +2,6 @@
 import { computed } from "vue";
 import { useCvStore } from "@/stores/cv";
 import { storeToRefs } from "pinia";
-import sampleCV from "@/components/cv_preview/cv_sample.json";
-import { onMounted } from "vue";
 
 const cv = useCvStore();
 const {
@@ -29,17 +27,6 @@ const platformIcons = {
   YouTube: "bi-youtube",
   TikTok: "bi-tiktok",
 };
-
-onMounted(() => {
-  cv.profile = sampleCV.profile;
-  cv.summary = sampleCV.summary;
-  cv.educations = sampleCV.educations;
-  cv.experiences = sampleCV.experiences;
-  cv.languages = sampleCV.languages;
-  cv.skills = sampleCV.skills;
-  cv.socialNetworks = sampleCV.socialNetworks;
-  cv.interests = sampleCV.interests;
-});
 
 const full_name = computed(
   () => `${profile.value.first_name} ${profile.value.last_name}`.trim()
