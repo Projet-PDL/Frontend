@@ -2,19 +2,26 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { useRouter } from 'vue-router'
 import CVSidebar from './Sidebar.vue'
-import { useAuthStore } from '@/stores/auth.store.ts'
+import { useAuthStore } from '@/stores/auth.store'
+import { useCvStore } from '@/stores/cv.store'
+import { apiCreateCv, apiGenerateCvFromLinkedIn } from '@/services/cvmanagement.service'
 
 const isSidebarOpen = ref(false)
 const showMenu = ref(false)
 const menuButtonRef = ref<HTMLElement | null>(null)
+
+const linkedinUrl = ref('')
+const isGenerating = ref(false)
+
 const router = useRouter()
 const auth = useAuthStore()
+const cvStore = useCvStore()
 
 // -- Sidebar --
 const toggleSidebar = () => (isSidebarOpen.value = !isSidebarOpen.value)
 const closeSidebar = () => (isSidebarOpen.value = false)
 
-// -- Menu 3 points --
+// -- Menu --
 const toggleMenu = (event: MouseEvent) => {
   event.stopPropagation()
   showMenu.value = !showMenu.value
@@ -44,6 +51,40 @@ const logout = () => {
   auth.logout()
   router.push('/')
 }
+
+/* =======================
+   GENERATE FROM LINKEDIN
+======================= */
+const generateCv = async () => {
+  if (!linkedinUrl.value) {
+    alert('Please enter a LinkedIn profile URL')
+    return
+  }
+
+  try {
+    isGenerating.value = true
+
+    // 1️⃣ Create empty CV
+    const cv = await apiCreateCv()
+
+    // 2️⃣ Generate CV from LinkedIn
+    const generatedCv = await apiGenerateCvFromLinkedIn(cv.id, {
+      linkedinUrl: linkedinUrl.value
+    })
+
+    // 3️⃣ Save CV globally
+    cvStore.setCv(generatedCv)
+
+    // (optionnel) redirection vers page édition CV
+    router.push(`/cv/${cv.id}`)
+
+  } catch (error) {
+    console.error(error)
+    alert('Error while generating CV')
+  } finally {
+    isGenerating.value = false
+  }
+}
 </script>
 
 <template>
@@ -54,8 +95,19 @@ const logout = () => {
         <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo" />
 
         <div class="generate-section">
-          <input type="text" class="form-control input-url" placeholder="Enter your LinkedIn profile URL" />
-          <button class="btn-generate">Generate</button>
+          <input
+            v-model="linkedinUrl"
+            type="text"
+            class="form-control input-url"
+            placeholder="Enter your LinkedIn profile URL"
+          />
+          <button
+            class="btn-generate"
+            :disabled="isGenerating"
+            @click="generateCv"
+          >
+            {{ isGenerating ? 'Generating...' : 'Generate' }}
+          </button>
         </div>
       </div>
 
@@ -96,6 +148,7 @@ const logout = () => {
     @close="closeSidebar"
   />
 </template>
+
 
 <style scoped>
 .navbar {
