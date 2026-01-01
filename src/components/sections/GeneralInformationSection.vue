@@ -1,27 +1,11 @@
 <script setup>
 import { ref, computed } from 'vue'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { profile, user } = storeToRefs(cv)
 const isEditing = ref(false)
-
-const user = ref({
-  profile_picture: '',
-})
-
-const profile = ref({ 
-    first_name: '',
-    last_name: '',
-    headline: '',
-    email: '',
-    birth_date: '',
-    phone: '',
-    street: '',
-    city: '',
-    postal_code: '',
-    region: '',
-    country: '',
-    website_url: '',
-    availability: ''
-})
 
 const full_name = computed({
   get: () => {
@@ -52,7 +36,6 @@ const location = computed({
     profile.value.city = value
   }
 })
-
 
 function handlePhotoUpload(event) {
   const file = event.target.files[0]
@@ -162,7 +145,7 @@ function removePhoto() {
 .general-information {
   background: white;
   border-radius: 10px;
-  padding: 20px 25px;
+  padding: 30px 30px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
 }
@@ -194,7 +177,7 @@ function removePhoto() {
   display: flex;
   align-items: center;
   gap: 15px;
-  margin: 10px 0 0;
+  margin: 15px 0 0;
   font-size: 18px;
 }
 

@@ -30,6 +30,8 @@ const openSection = () => emit('open')
 
 const skills = ref<any[]>([])
 
+const cv = useCvStore()
+const { skills } = storeToRefs(cv)
 const isEditing = ref(false)
 const editingIndex = ref<number | null>(null)
 

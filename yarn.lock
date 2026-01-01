@@ -2396,7 +2396,7 @@ vue-component-type-helpers@^2.0.0:
 
 vue-i18n@^11.1.12:
   version "11.1.12"
-  resolved "https://registry.npmjs.org/vue-i18n/-/vue-i18n-11.1.12.tgz"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-11.1.12.tgz#230b21d65dd89343ebd40d19c9e3cfb13db8c1fd"
   integrity sha512-BnstPj3KLHLrsqbVU2UOrPmr0+Mv11bsUZG0PyCOzsawCivk8W00GMXHeVUWIDOgNaScCuZah47CZFE+Wnl8mw==
   dependencies:
     "@intlify/core-base" "11.1.12"

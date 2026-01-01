@@ -1,11 +1,12 @@
 <script setup>
 import { ref } from 'vue'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { summary } = storeToRefs(cv)
 const isEditing = ref(false)
 
-const profile = ref({
-  professional_summary: ''
-})
 </script>
 
 <template>
@@ -23,7 +24,7 @@ const profile = ref({
 
       <form class="edit-form" @submit.prevent="isEditing = false">
         <label>Professional profile</label>
-        <textarea v-model="profile.professional_summary" class="input-field input-creation"
+        <textarea v-model="summary.professional_summary" class="input-field input-creation"
           placeholder="Write a professional summary or objective statement that highlights your key qualifications and career goals..." rows="4"
         ></textarea>
 

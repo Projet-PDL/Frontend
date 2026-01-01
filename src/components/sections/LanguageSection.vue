@@ -78,6 +78,11 @@ const startAdd = () => {
     proficiency_level: '',
     position: languages.value.length + 1
   }
+  tempLanguage.value = {
+    language_name: '',
+    proficiency_level: '',
+    position: languages.value.length + 1
+  }
 }
 
 const startEdit = (index: number) => {

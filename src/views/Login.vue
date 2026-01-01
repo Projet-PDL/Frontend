@@ -175,7 +175,7 @@ section {
 .toggle-password {
   position: absolute;
   right: 15px;
-  top: 38%;
+  top: 50%;
   transform: translateY(-50%);
   font-size: 14px;
   color: #0f62a4;

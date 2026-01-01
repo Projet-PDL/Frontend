@@ -1,16 +1,18 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { socialNetworks } = storeToRefs(cv)
 const isEditing = ref(false)
 const editingIndex = ref(null)
-
-const socialNetworks = ref([])
 
 const tempNetwork = ref({
   platform: '',
   username: '',
-  position: null
+  position: 1
 })
 
 const availablePlatforms = [
@@ -33,18 +35,22 @@ const openSection = () => emit('open')
 const startAdd = () => {
   isEditing.value = true
   editingIndex.value = null
-  tempNetwork.value = { platform: '', username: '', position: socialNetworks.value.length + 1 }
+  tempNetwork.value = {
+    platform: '',
+    username: '',
+    position: socialNetworks.value.length + 1
+    }
 }
 
 const startEdit = (index) => {
   editingIndex.value = index
   isEditing.value = true
-  tempNetwork.value = { ...socialNetworks.value[index] }
+  tempNetwork.value = {...socialNetworks.value[index] }
 }
 
 const deleteNetwork = (index) => {
   socialNetworks.value.splice(index, 1)
-  socialNetworks.value.forEach((n, i) => (n.position = i + 1))
+  updatePositions()
   isEditing.value = false
 }
 
@@ -52,8 +58,12 @@ const saveNetwork = () => {
   if (editingIndex.value !== null)
     socialNetworks.value[editingIndex.value] = { ...tempNetwork.value }
   else
-    socialNetworks.value.push({ ...tempNetwork.value, position: socialNetworks.value.length + 1 })
+    socialNetworks.value.push({
+      ...tempNetwork.value,
+      position: socialNetworks.value.length + 1
+    })
 
+  updatePositions()
   isEditing.value = false
   editingIndex.value = null
 }

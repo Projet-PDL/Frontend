@@ -1,12 +1,14 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { educations } = storeToRefs(cv)
 const isOpen = ref(false)
 const isEditing = ref(false)
 const editingIndex = ref(null)
-
-const educations = ref([])
 
 const tempEducation = ref({
   degree: '',
@@ -14,7 +16,7 @@ const tempEducation = ref({
   start_date: '',
   end_date: '',
   description: '',
-  position: null
+  position: 1
 })
 
 const emit = defineEmits(['open'])
@@ -24,7 +26,14 @@ defineProps({ isActive: Boolean })
 const startAdd = () => {
   isEditing.value = true
   editingIndex.value = null
-  tempEducation.value = { degree: '', school: '', start_date: '', end_date: '', description: '', position: educations.value.length + 1 }
+  tempEducation.value = {
+    degree: '',
+    school: '',
+    start_date: '',
+    end_date: '',
+    description: '',
+    position: educations.value.length + 1
+  }
 }
 
 const startEdit = (index) => {
@@ -35,22 +44,27 @@ const startEdit = (index) => {
 
 const deleteEducation = (index) => {
   educations.value.splice(index, 1)
-  educations.value.forEach((edu, i) => (edu.position = i + 1))
+  updatePositions()
   isEditing.value = false
 }
 
 const saveEducation = () => {
-  if (editingIndex.value !== null)
+  if (editingIndex.value !== null) {
     educations.value[editingIndex.value] = { ...tempEducation.value }
-  else
-    educations.value.push({ ...tempEducation.value, position: educations.value.length + 1 })
+  } else {
+    educations.value.push({
+      ...tempEducation.value,
+      position: educations.value.length + 1
+    })
+  }
 
+  updatePositions()
   isEditing.value = false
   editingIndex.value = null
 }
 
 const updatePositions = () => {
-  educations.value.forEach((edu, i) => (edu.position = i + 1))
+  educations.value.forEach((edu, i) => edu.position = i + 1)
 }
 </script>
 
@@ -60,7 +74,7 @@ const updatePositions = () => {
       <div class="section-creation-icon-title"><i class="bi bi-mortarboard-fill"></i><span>Education</span></div>
       <i :class="['bi', isOpen ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
     </div>
-      <div v-if="isActive && !isEditing" class="section-creation-content section-creation-content-open">
+    <div v-if="isActive && !isEditing" class="section-creation-content section-creation-content-open">
       <draggable v-model="educations" @end="updatePositions" item-key="position">
         <template #item="{ element, index }">
           <div>

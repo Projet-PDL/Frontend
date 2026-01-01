@@ -1,11 +1,13 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
+import { useCvStore } from '@/stores/cv'
+import { storeToRefs } from 'pinia'
 
+const cv = useCvStore()
+const { experiences } = storeToRefs(cv)
 const isEditing = ref(false)
 const editingIndex = ref(null)
-
-const experiences = ref([])
 
 const tempExperience = ref({
   title: '',
@@ -14,7 +16,7 @@ const tempExperience = ref({
   start_date: '',
   end_date: '',
   description: '',
-  position: null
+  position: 1
 })
 
 const emit = defineEmits(['open'])
@@ -44,7 +46,7 @@ const startEdit = (index) => {
 
 const deleteExperience = (index) => {
   experiences.value.splice(index, 1)
-  experiences.value.forEach((exp, i) => (exp.position = i + 1))
+  updatePositions()
   isEditing.value = false
 }
 
@@ -52,8 +54,12 @@ const saveExperience = () => {
   if (editingIndex.value !== null)
     experiences.value[editingIndex.value] = { ...tempExperience.value }
   else
-    experiences.value.push({ ...tempExperience.value, position: experiences.value.length + 1 })
+    experiences.value.push({ 
+      ...tempExperience.value,
+      position: experiences.value.length + 1 
+    })
 
+  updatePositions()
   isEditing.value = false
   editingIndex.value = null
 }
