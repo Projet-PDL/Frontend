@@ -2,17 +2,18 @@
 import { computed, ref } from 'vue'
 import draggable from 'vuedraggable'
 import { useCvStore } from '@/stores/cv.store.ts'
-import { storeToRefs } from 'pinia'
 import {
-  apiCreateEducation,
-  apiUpdateEducation,
-  apiDeleteEducation
-} from '@/services/education.service'
+  apiCreateCertification,
+  apiUpdateCertification,
+  apiDeleteCertification
+} from '@/services/certification.service'
 
-const cv = useCvStore()
-const { educations } = storeToRefs(cv)
+const cvStore = useCvStore()
 
-const props = defineProps({ isActive: Boolean })
+const props = defineProps({
+  isActive: Boolean
+})
+
 const emit = defineEmits(['open'])
 const openSection = () => emit('open')
 
@@ -20,33 +21,33 @@ const isEditing = ref(false)
 const editingIndex = ref<number | null>(null)
 const saving = ref(false)
 
-const tempEducation = ref({
+/** Source = store */
+const certifications = computed(() => cvStore.certifications || [])
+
+const tempCert = ref({
   id: null as number | null,
-  degree: '',
-  school: '',
-  start_date: '', // YYYY-MM
-  end_date: '',   // YYYY-MM
-  description: '',
+  name: '',
+  issuer: '',
+  issue_month: '',      // YYYY-MM
+  expiration_month: '', // YYYY-MM
+  credentialUrl: '',
   position: 1
 })
 
 function requireCvId(): number {
-  const id = cv.currentCvId
+  const id = cvStore.currentCvId
   if (!id) throw new Error('Missing CV id (currentCvId is null)')
   return id
 }
 
 function monthToISODate(month: string): string | undefined {
-  // "2026-01" -> "2026-01-01T00:00:00.000Z"
   if (!month) return undefined
   const [y, m] = month.split('-')
   if (!y || !m) return undefined
-  const iso = new Date(Number(y), Number(m) - 1, 1).toISOString()
-  return iso
+  return new Date(Number(y), Number(m) - 1, 1).toISOString()
 }
 
 function isoToMonth(iso?: string): string {
-  // "2026-01-01T..." -> "2026-01"
   if (!iso) return ''
   const d = new Date(iso)
   const y = d.getFullYear()
@@ -57,86 +58,87 @@ function isoToMonth(iso?: string): string {
 const startAdd = () => {
   isEditing.value = true
   editingIndex.value = null
-  tempEducation.value = {
+  tempCert.value = {
     id: null,
-    degree: '',
-    school: '',
-    start_date: '',
-    end_date: '',
-    description: '',
-    position: educations.value.length + 1
+    name: '',
+    issuer: '',
+    issue_month: '',
+    expiration_month: '',
+    credentialUrl: '',
+    position: certifications.value.length + 1
   }
 }
 
 const startEdit = (index: number) => {
-  editingIndex.value = index
   isEditing.value = true
-  const edu: any = educations.value[index]
-  tempEducation.value = {
-    id: edu.id ?? null,
-    degree: edu.degree ?? '',
-    school: edu.school ?? '',
-    start_date: isoToMonth(edu.start_date ?? edu.startDate),
-    end_date: isoToMonth(edu.end_date ?? edu.endDate),
-    description: edu.description ?? '',
-    position: edu.position ?? index + 1
+  editingIndex.value = index
+  const c: any = certifications.value[index]
+  tempCert.value = {
+    id: c.id ?? null,
+    name: c.name ?? '',
+    issuer: c.issuer ?? '',
+    issue_month: isoToMonth(c.issueDate ?? c.issue_date),
+    expiration_month: isoToMonth(c.expirationDate ?? c.expiration_date),
+    credentialUrl: c.credentialUrl ?? '',
+    position: c.position ?? index + 1
   }
 }
 
-const saveEducation = async () => {
+const saveCertification = async () => {
   saving.value = true
   try {
     const cvId = requireCvId()
 
     const dto = {
-      degree: tempEducation.value.degree || undefined,
-      school: tempEducation.value.school || undefined,
-      startDate: monthToISODate(tempEducation.value.start_date),
-      endDate: monthToISODate(tempEducation.value.end_date),
-      description: tempEducation.value.description || undefined,
+      name: tempCert.value.name,
+      issuer: tempCert.value.issuer || undefined,
+      issueDate: monthToISODate(tempCert.value.issue_month),
+      expirationDate: monthToISODate(tempCert.value.expiration_month),
+      credentialUrl: tempCert.value.credentialUrl || undefined,
       position:
         editingIndex.value !== null
-          ? (educations.value[editingIndex.value] as any).position
-          : educations.value.length + 1
+          ? (certifications.value[editingIndex.value] as any).position
+          : certifications.value.length + 1
     }
 
     if (editingIndex.value !== null) {
-      const edu: any = educations.value[editingIndex.value]
-      const eduId = Number(edu.id)
-      await apiUpdateEducation(cvId, eduId, dto)
+      const c: any = certifications.value[editingIndex.value]
+      await apiUpdateCertification(cvId, Number(c.id), dto)
     } else {
-      await apiCreateEducation(cvId, dto)
+      await apiCreateCertification(cvId, dto)
     }
 
-    await cv.loadCv(cvId)
-
+    await cvStore.loadCv(cvId)
     isEditing.value = false
     editingIndex.value = null
   } catch (err) {
-    console.error('Erreur sauvegarde education', err)
+    console.error('Erreur sauvegarde certification', err)
   } finally {
     saving.value = false
   }
 }
 
-const deleteEducation = async (index: number) => {
+const deleteCertification = async (index: number) => {
+  saving.value = true
   try {
     const cvId = requireCvId()
-    const edu: any = educations.value[index]
-    await apiDeleteEducation(cvId, Number(edu.id))
-    await cv.loadCv(cvId)
+    const c: any = certifications.value[index]
+    await apiDeleteCertification(cvId, Number(c.id))
+    await cvStore.loadCv(cvId)
 
-    if (editingIndex.value === index) {
-      isEditing.value = false
-      editingIndex.value = null
-    }
+    isEditing.value = false
+    editingIndex.value = null
   } catch (err) {
-    console.error('Erreur suppression education', err)
+    console.error('Erreur suppression certification', err)
+  } finally {
+    saving.value = false
   }
 }
 
-const updatePositions = () => {
-  educations.value.forEach((edu: any, i: number) => (edu.position = i + 1))
+const onDragEnd = async () => {
+  // optionnel : si tu veux persister l'ordre, il faut une route dédiée "reorder"
+  // ou refaire un bulk update (que tu n'as pas pour certifications).
+  // Ici on ne persiste pas l'ordre côté backend sans endpoint.
 }
 </script>
 
@@ -145,21 +147,22 @@ const updatePositions = () => {
     <!-- HEADER -->
     <div v-if="!isEditing" class="section-creation-header" @click="openSection">
       <div class="section-creation-icon-title">
-        <i class="bi bi-mortarboard-fill"></i><span>Education</span>
+        <i class="bi bi-patch-check-fill"></i>
+        <span>Certifications</span>
       </div>
       <i :class="['bi', isActive ? 'bi-chevron-up' : 'bi-chevron-down']"></i>
     </div>
 
     <!-- LIST -->
     <div v-if="isActive && !isEditing" class="section-creation-content section-creation-content-open">
-      <draggable v-model="educations" @end="updatePositions" item-key="id">
+      <draggable v-model="cvStore.certifications" item-key="id" @end="onDragEnd">
         <template #item="{ element, index }">
           <div class="section-item">
             <div class="left">
-              <i class="bi bi-mortarboard"></i>
+              <i class="bi bi-patch-check"></i>
               <div class="text">
-                <strong>{{ element.degree || 'Degree' }}</strong>
-                <span class="muted">{{ element.school || 'School' }}</span>
+                <strong>{{ element.name || 'Certification' }}</strong>
+                <span class="muted">{{ element.issuer || 'Issuer' }}</span>
               </div>
             </div>
 
@@ -167,7 +170,7 @@ const updatePositions = () => {
               <button class="icon-btn" type="button" title="Edit" @click.stop="startEdit(index)">
                 <i class="bi bi-pencil-square"></i>
               </button>
-              <button class="icon-btn danger" type="button" title="Delete" @click.stop="deleteEducation(index)">
+              <button class="icon-btn danger" type="button" title="Delete" @click.stop="deleteCertification(index)">
                 <i class="bi bi-trash"></i>
               </button>
             </div>
@@ -183,7 +186,7 @@ const updatePositions = () => {
     <!-- EDIT MODE -->
     <div v-if="isEditing" class="edit-mode section-creation-content">
       <div class="edit-header">
-        <h2>{{ editingIndex !== null ? 'Edit Entry' : 'Add Entry' }}</h2>
+        <h2>{{ editingIndex !== null ? 'Edit Certification' : 'Add Certification' }}</h2>
         <button
           class="delete-btn"
           type="button"
@@ -193,36 +196,31 @@ const updatePositions = () => {
         </button>
       </div>
 
-      <form class="edit-form" @submit.prevent="saveEducation">
+      <form class="edit-form" @submit.prevent="saveCertification">
         <div class="form-row">
-          <label>Degree</label>
-          <input v-model="tempEducation.degree" class="input-field input-creation" placeholder="e.g. Master MIAGE" />
+          <label>Name</label>
+          <input v-model="tempCert.name" class="input-field input-creation" placeholder="e.g. AWS Solutions Architect" required />
         </div>
 
         <div class="form-row">
-          <label>School</label>
-          <input v-model="tempEducation.school" class="input-field input-creation" placeholder="e.g. Université de Rennes" />
+          <label>Issuer</label>
+          <input v-model="tempCert.issuer" class="input-field input-creation" placeholder="e.g. Amazon Web Services" />
         </div>
 
         <div class="form-grid">
           <div>
-            <label>Start date</label>
-            <input v-model="tempEducation.start_date" type="month" class="input-field input-creation" />
+            <label>Issue date</label>
+            <input v-model="tempCert.issue_month" type="month" class="input-field input-creation" />
           </div>
           <div>
-            <label>End date</label>
-            <input v-model="tempEducation.end_date" type="month" class="input-field input-creation" />
+            <label>Expiration date</label>
+            <input v-model="tempCert.expiration_month" type="month" class="input-field input-creation" />
           </div>
         </div>
 
         <div class="form-row">
-          <label>Description</label>
-          <textarea
-            v-model="tempEducation.description"
-            class="input-field input-creation"
-            placeholder="e.g. Focused on IT project management..."
-            rows="4"
-          ></textarea>
+          <label>Credential URL</label>
+          <input v-model="tempCert.credentialUrl" class="input-field input-creation" placeholder="https://..." />
         </div>
 
         <button type="submit" class="btn-principale btn-creation" :disabled="saving">
@@ -255,12 +253,12 @@ const updatePositions = () => {
 .text{
   display:flex;
   flex-direction:column;
-  line-height: 1.2;
+  line-height:1.2;
 }
 
 .muted{
   color:#7e7e7e;
-  font-size: 0.9rem;
+  font-size:0.9rem;
 }
 
 .actions{

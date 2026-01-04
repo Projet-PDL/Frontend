@@ -38,7 +38,7 @@ const handleSubscribe = () => {
             </li>
 
             <li>
-                <RouterLink to="/home" class="link">How it works</RouterLink>
+                <RouterLink to="/" class="link">How it works</RouterLink>
             </li>
 
             <li>
@@ -71,6 +71,8 @@ const handleSubscribe = () => {
   align-items: center;
   justify-content: center;
   text-align: center;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 h2 {
@@ -78,23 +80,31 @@ h2 {
   font-size: 30px;
   font-weight: 600;
   margin: 70px 0 30px;
+  padding: 0 16px;
 }
 
+/* =========================
+   NEWSLETTER (Desktop base)
+========================= */
 .newsletter-section {
   position: relative;
   width: 900px;
+  max-width: calc(100% - 32px);
   border-radius: 8px;
   display: flex;
   align-items: center;
   height: 95px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.39);
+  background: white;
+  margin: 0 auto;
 }
 
 .input-url {
   width: 100%;
-  height: 100%; 
-  padding: 0 25px 0 25px;  
+  height: 100%;
+  padding: 0 25px;
   border: none;
+  border-radius: 8px;
 }
 
 .input-url::placeholder {
@@ -117,12 +127,17 @@ h2 {
   right: 25px;
   top: 50%;
   transform: translateY(-50%);
+  white-space: nowrap;
 }
 
+/* =========================
+   INFO SECTION
+========================= */
 .information-section {
   margin-top: -42px;
   background-color: #0F62A4;
-  width : 100%;
+  width: 100%;
+  padding: 0 16px;
 }
 
 .information-section h1 {
@@ -141,15 +156,17 @@ h2 {
 
 .footer-links {
   display: flex;
-  justify-content: center;  
+  justify-content: center;
   align-items: center;
   gap: 30px;
   list-style: none;
   margin: 30px auto;
+  padding: 0;
+  flex-wrap: wrap;
 }
 
 .link {
-  text-decoration: none; 
+  text-decoration: none;
   color: white;
   font-size: 18px;
   transition: color 0.3s ease;
@@ -168,10 +185,11 @@ h2 {
   margin: 30px auto;
   color: white;
   font-size: 20px;
+  flex-wrap: wrap;
 }
 
-.social i { 
-  cursor: pointer; 
+.social i {
+  cursor: pointer;
 }
 
 .social i:hover {
@@ -194,6 +212,7 @@ h2 {
   font-size: 14px;
   color: white;
   margin-bottom: 25px;
+  gap: 12px;
 }
 
 .footer-bottom p {
@@ -204,5 +223,97 @@ h2 {
   display: flex;
   gap: 60px;
   color: white;
+  flex-wrap: wrap;
+  justify-content: center;
 }
+
+/* =========================
+   SUCCESS TOAST
+========================= */
+.success-toast{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #198754;
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  z-index: 9999;
+  max-width: calc(100% - 40px);
+}
+
+/* =========================
+   RESPONSIVE (Tablet + Mobile)
+   -> tout en colonne pour la newsletter
+========================= */
+@media (max-width: 1024px) {
+  h2{
+    font-size: 24px;
+    margin: 55px 0 24px;
+  }
+
+  .newsletter-section{
+    height: auto;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .input-url{
+    height: 54px;
+    padding: 0 14px;
+  }
+
+  .btn-principale{
+    position: static;
+    transform: none;
+    width: 100%;
+    padding: 14px 18px;
+  }
+
+  .information-section{
+    margin-top: 24px;
+    padding-bottom: 20px;
+  }
+
+  .information-section h1{
+    margin-top: 40px;
+    font-size: 28px;
+  }
+
+  .information-text{
+    width: 100%;
+    max-width: 720px;
+    font-size: 16px;
+  }
+
+  .footer-bottom{
+    padding: 0 16px;
+  }
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+  .footer-links{
+    gap: 14px;
+    margin: 22px auto;
+  }
+
+  .link{
+    font-size: 16px;
+  }
+
+  .footer-bottom{
+    flex-direction: column;
+    text-align: center;
+    margin-bottom: 18px;
+  }
+
+  .left-part{
+    gap: 14px;
+  }
+}
+
 </style>

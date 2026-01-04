@@ -1,21 +1,25 @@
 <script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { RouterLink, useRouter } from 'vue-router'
 import CVSidebar from './Sidebar.vue'
 import { useAuthStore } from '@/stores/auth.store'
-import { useCvStore } from '@/stores/cv.store'
+import { useCvStore } from '@/stores/cv.store.ts'
 import { apiCreateCv, apiGenerateCvFromLinkedIn } from '@/services/cvmanagement.service'
+import LanguageSelector from '@/components/LanguageSelector.vue'
 
 const isSidebarOpen = ref(false)
 const showMenu = ref(false)
 const menuButtonRef = ref<HTMLElement | null>(null)
 
-const linkedinUrl = ref('')
+const linkedInUrl = ref('')
 const isGenerating = ref(false)
 
 const router = useRouter()
 const auth = useAuthStore()
 const cvStore = useCvStore()
+
+// auth state
+const isAuthenticated = computed(() => !!auth.token)
 
 // -- Sidebar --
 const toggleSidebar = () => (isSidebarOpen.value = !isSidebarOpen.value)
@@ -36,17 +40,6 @@ const handleClickOutside = (event: MouseEvent) => {
 onMounted(() => document.addEventListener('click', handleClickOutside))
 onBeforeUnmount(() => document.removeEventListener('click', handleClickOutside))
 
-const goToHome = () => {
-  router.push('/')
-  showMenu.value = false
-}
-
-const copyLink = () => {
-  navigator.clipboard.writeText(window.location.href)
-  alert('Lien copié dans le presse-papiers !')
-  showMenu.value = false
-}
-
 const logout = () => {
   auth.logout()
   router.push('/')
@@ -56,7 +49,8 @@ const logout = () => {
    GENERATE FROM LINKEDIN
 ======================= */
 const generateCv = async () => {
-  if (!linkedinUrl.value) {
+  const url = linkedInUrl.value.trim()
+  if (!url) {
     alert('Please enter a LinkedIn profile URL')
     return
   }
@@ -64,20 +58,33 @@ const generateCv = async () => {
   try {
     isGenerating.value = true
 
-    // 1️⃣ Create empty CV
-    const cv = await apiCreateCv()
+    // 1) Create empty CV
+    const created = await apiCreateCv()
+    // created = { success: true, data: { id, ... } }
+    const cvId = created?.data?.id
 
-    // 2️⃣ Generate CV from LinkedIn
-    const generatedCv = await apiGenerateCvFromLinkedIn(cv.id, {
-      linkedinUrl: linkedinUrl.value
-    })
+    if (!cvId) {
+      throw new Error('CV id missing in createCv response')
+    }
 
-    // 3️⃣ Save CV globally
-    cvStore.setCv(generatedCv)
+    // 2) Generate from LinkedIn
+    const generated = await apiGenerateCvFromLinkedIn(cvId, { linkedInUrl: url })
+    // generated = { success: true, data: { ...cv complet... } }
+    const cv = generated?.data
 
-    // (optionnel) redirection vers page édition CV
-    router.push(`/cv/${cv.id}`)
+    if (!cv) {
+      throw new Error('CV data missing in generateCvFromLinkedIn response')
+    }
 
+    // 3) Hydrate store + set currentCvId
+    cvStore.setCvId(cvId)
+    cvStore.hydrateFromBackend(cv)
+
+    // 4) (Optionnel) refresh la liste dans la sidebar
+    await cvStore.loadMyCvs()
+
+    // 5) Nettoyage UI
+    linkedInUrl.value = ''
   } catch (error) {
     console.error(error)
     alert('Error while generating CV')
@@ -85,58 +92,194 @@ const generateCv = async () => {
     isGenerating.value = false
   }
 }
+
+// Émettre l'événement download vers le parent
+const emit = defineEmits(['download'])
+
+const handleDownload = () => {
+  emit('download')
+}
+
+async function generateCvFromUrl(url: string) {
+  linkedInUrl.value = url
+  await generateCv()
+}
+
 </script>
+
+<!--<template>-->
+<!--  <nav class="navbar">-->
+<!--    <div class="navbar-container">-->
+<!--      <div class="navbar-left">-->
+<!--        <i v-if="isAuthenticated" class="bi bi-grid-3x3-gap-fill icon-menu" @click="toggleSidebar"></i>-->
+
+<!--        <RouterLink to="/" class="link">-->
+<!--          <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo" />-->
+<!--        </RouterLink>-->
+<!--      </div>-->
+
+<!--      <div class="navbar-right">-->
+<!--        <LanguageSelector />-->
+
+<!--        <ul v-if="!isAuthenticated" class="navbar-links">-->
+<!--          <li>-->
+<!--            <RouterLink to="/contact" class="link">-->
+<!--              <i class="bi bi-envelope"></i>-->
+<!--              <span>Contact</span>-->
+<!--            </RouterLink>-->
+<!--          </li>-->
+
+<!--          <li>-->
+<!--            <RouterLink to="/about" class="link">-->
+<!--              <i class="bi bi-info-circle"></i>-->
+<!--              <span>About</span>-->
+<!--            </RouterLink>-->
+<!--          </li>-->
+<!--          <li>-->
+<!--            <RouterLink to="/login" class="btn-principale">Sign In</RouterLink>-->
+<!--          </li>-->
+<!--        </ul>-->
+
+<!--        <div v-else class="generate-section">-->
+<!--          <input-->
+<!--            v-model="linkedInUrl"-->
+<!--            type="text"-->
+<!--            class="form-control input-url"-->
+<!--            placeholder="Enter your LinkedIn profile URL"-->
+<!--          />-->
+<!--          <button-->
+<!--            class="btn-generate"-->
+<!--            :disabled="isGenerating || !linkedInUrl.trim()"-->
+<!--            @click="generateCv"-->
+<!--          >-->
+<!--            {{ isGenerating ? 'Generating...' : 'Generate' }}-->
+<!--          </button>-->
+<!--        </div>-->
+
+<!--        <div v-if="isAuthenticated" class="menu-actions">-->
+
+<!--          <button class="btn-principale btn-icon" @click="handleDownload">-->
+<!--            Download-->
+<!--            <i class="bi bi-download"></i>-->
+<!--          </button>-->
+
+<!--          <div class="menu-wrapper" ref="menuButtonRef">-->
+<!--            <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>-->
+
+<!--            <div v-if="showMenu" class="dropdown-menu-global">-->
+<!--              <RouterLink to="/creation" class="link menu-item">-->
+<!--                <i class="bi bi-house-door"></i> Dashboard-->
+<!--              </RouterLink>-->
+
+<!--              <RouterLink to="/contact" class="link menu-item">-->
+<!--                <i class="bi bi-envelope"></i>-->
+<!--                <span>Contact</span>-->
+<!--              </RouterLink>-->
+
+<!--              <RouterLink to="/about" class="link menu-item">-->
+<!--                <i class="bi bi-info-circle"></i>-->
+<!--                <span>About</span>-->
+<!--              </RouterLink>-->
+
+<!--              &lt;!&ndash; <div class="menu-item" @click="copyLink"><i class="bi bi-link-45deg"></i> Share</div>&ndash;&gt;-->
+<!--              <div class="menu-item" style="color: red" @click="logout">-->
+<!--                <i class="bi bi-box-arrow-left"></i> Log out-->
+<!--              </div>-->
+<!--            </div>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </nav>-->
+
+<!--  <CVSidebar :is-open="isSidebarOpen" @close="closeSidebar" />-->
+<!--</template>-->
 
 <template>
   <nav class="navbar">
     <div class="navbar-container">
       <div class="navbar-left">
-        <i class="bi bi-grid-3x3-gap-fill icon-menu" @click="toggleSidebar"></i>
-        <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo" />
+        <!-- (desktop only) bouton sidebar -->
+        <i
+          v-if="isAuthenticated"
+          class="bi bi-grid-3x3-gap-fill icon-menu"
+          @click="toggleSidebar"
+        ></i>
 
-        <div class="generate-section">
-          <input
-            v-model="linkedinUrl"
-            type="text"
-            class="form-control input-url"
-            placeholder="Enter your LinkedIn profile URL"
-          />
-          <button
-            class="btn-generate"
-            :disabled="isGenerating"
-            @click="generateCv"
-          >
-            {{ isGenerating ? 'Generating...' : 'Generate' }}
-          </button>
-        </div>
+        <RouterLink to="/" class="link">
+          <img src="@/assets/images/logo.png" alt="LinkedIn2CV logo" class="navbar-logo" />
+        </RouterLink>
       </div>
 
       <div class="navbar-right">
-        <div class="language-section">
-          <i class="bi bi-globe"></i>
-          <span>English</span>
+        <!-- ✅ Tout ce bloc disparaît sur mobile -->
+        <div class="navbar-desktop-only">
+          <LanguageSelector />
+
+          <ul v-if="!isAuthenticated" class="navbar-links">
+            <li>
+              <RouterLink to="/contact" class="link">
+                <i class="bi bi-envelope"></i><span>Contact</span>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/about" class="link">
+                <i class="bi bi-info-circle"></i><span>About</span>
+              </RouterLink>
+            </li>
+            <li>
+              <RouterLink to="/login" class="btn-principale">Sign In</RouterLink>
+            </li>
+          </ul>
+
+          <div v-else class="generate-section">
+            <input
+              v-model="linkedInUrl"
+              type="text"
+              class="form-control input-url"
+              placeholder="Enter your LinkedIn profile URL"
+            />
+            <button
+              class="btn-generate"
+              :disabled="isGenerating || !linkedInUrl.trim()"
+              @click="generateCv"
+            >
+              {{ isGenerating ? 'Generating...' : 'Generate' }}
+            </button>
+          </div>
+
+          <div v-if="isAuthenticated" class="menu-actions desktop-actions">
+            <button class="btn-principale btn-icon" @click="handleDownload">
+              Download <i class="bi bi-download"></i>
+            </button>
+          </div>
         </div>
 
-        <div class="menu-actions">
-          <button class="btn-principale btn-icon">
-            Download
-            <i class="bi bi-download"></i>
-          </button>
+        <!-- ✅ Dropdown à droite : reste visible partout -->
+        <div :class="{ 'mobile-only': !isAuthenticated }"
+             class="menu-wrapper " ref="menuButtonRef">
+          <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>
 
-          <div class="menu-wrapper" ref="menuButtonRef">
-            <i class="bi bi-three-dots-vertical icon-menu-dots" @click="toggleMenu"></i>
+          <div v-if="showMenu" class="dropdown-menu-global">
+            <RouterLink to="/creation" class="link menu-item">
+              <i class="bi bi-house-door"></i> Dashboard
+            </RouterLink>
 
-            <div v-if="showMenu" class="dropdown-menu-global">
-              <div class="menu-item" @click="goToHome">
-                <i class="bi bi-house-door"></i> Homepage
-              </div>
-              <div class="menu-item" @click="copyLink">
-                <i class="bi bi-link-45deg"></i> Share
-              </div>
-              <div class="menu-item" style="color: red" @click="logout">
-                <i class="bi bi-box-arrow-left"></i> Log out
-              </div>
+            <RouterLink to="/contact" class="link menu-item">
+              <i class="bi bi-envelope"></i><span>Contact</span>
+            </RouterLink>
+
+            <RouterLink to="/about" class="link menu-item">
+              <i class="bi bi-info-circle"></i><span>About</span>
+            </RouterLink>
+
+            <div v-if="isAuthenticated" class="menu-item" style="color: red" @click="logout">
+              <i class="bi bi-box-arrow-left"></i> Log out
             </div>
+
+            <RouterLink v-else to="/login" class="link menu-item">
+              <i class="bi bi-box-arrow-in-right"></i> Sign In
+            </RouterLink>
           </div>
         </div>
       </div>
@@ -146,14 +289,50 @@ const generateCv = async () => {
   <CVSidebar
     :is-open="isSidebarOpen"
     @close="closeSidebar"
+    @download="handleDownload"
+    @generate-linkedin="generateCvFromUrl"
   />
 </template>
 
-
 <style scoped>
+
+.mobile-only{
+  display: none !important;
+}
+
+.navbar-desktop-only{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Mobile */
+@media (max-width: 1024px) {
+  .navbar-container{
+    padding: 10px 12px;
+  }
+
+  /* On cache tout sauf logo + dropdown */
+  .navbar-desktop-only{
+    display: none;
+  }
+
+  .navbar-right{
+    gap: 12px;
+  }
+
+  .navbar-logo{
+    height: 36px;
+  }
+
+  .mobile-only{
+    display: block !important;
+  }
+}
+
 .navbar {
   background-color: white;
-  width: 90%;
+  width: 100%;
   margin: 0 auto;
   overflow: visible;
 }
@@ -162,7 +341,7 @@ const generateCv = async () => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 16px 0;
+  padding: 12px 0;
   overflow: visible;
 }
 
@@ -224,15 +403,6 @@ const generateCv = async () => {
   align-items: center;
   gap: 20px;
   overflow: visible;
-}
-
-.language-section {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-family: 'Roboto', sans-serif;
-  color: black;
-  cursor: pointer;
 }
 
 .menu-actions {

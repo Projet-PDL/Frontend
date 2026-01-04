@@ -44,9 +44,9 @@ const handleForgotSubmit = (forgotEmail: string) => {
 
 <template>
   <div class="login-page">
-    <NavbarLogin />
+<!--    <NavbarLogin />-->
 
-    <a href="/" class="back-link">← Homepage</a>
+<!--    <a href="/" class="back-link">← Homepage</a>-->
 
     <section class="login-section container">
       <div class="login-card">
@@ -128,7 +128,7 @@ const handleForgotSubmit = (forgotEmail: string) => {
 
     <div v-if="showSuccess" class="success-toast">Email sent! Check your inbox.</div>
 
-    <Footer />
+<!--    <Footer />-->
   </div>
 </template>
 
@@ -259,7 +259,7 @@ section {
 .register-link {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 5px;
   justify-content: center;
   margin: 25px 0 0;
   font-size: 13px;
@@ -296,4 +296,73 @@ section {
   opacity: 0;
   transform: translateY(-15px);
 }
+
+/*  Evite les débordements horizontaux */
+.login-page {
+  overflow-x: hidden;
+  padding: 0 16px;
+}
+
+/* =========================
+   TABLETTE (<= 992px)
+========================= */
+@media (max-width: 992px) {
+  section {
+    margin: 70px auto;
+    gap: 30px;
+  }
+
+  .login-card {
+    max-width: 440px;
+    padding: 22px;
+  }
+
+  .cv-image {
+    max-width: 360px;
+  }
+}
+
+/* =========================
+   MOBILE (<= 768px)
+========================= */
+@media (max-width: 768px) {
+  section {
+    margin: 40px auto;
+    grid-template-columns: 1fr; /*  une seule colonne */
+    gap: 20px;
+  }
+
+  /*  Image au-dessus */
+  .cv-image {
+    order: 1;
+    max-width: 360px;
+  }
+
+  .login-card {
+    max-width: 420px;
+    padding: 18px;
+  }
+
+  .btn-google {
+    padding: 10px 18px;
+  }
+
+  .toggle-password {
+    top: 50%;
+  }
+}
+
+/* =========================
+   PETITS MOBILES (<= 420px)
+========================= */
+@media (max-width: 420px) {
+  .login-card {
+    padding: 16px;
+  }
+
+  .btn-google span {
+    font-size: 13px;
+  }
+}
+
 </style>

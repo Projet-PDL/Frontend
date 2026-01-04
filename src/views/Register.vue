@@ -20,8 +20,45 @@ const showConfirmPassword = ref(false)
 const showSuccess = ref(false)
 const errorMessage = ref('')
 
+const MIN_NAME_LENGTH = 2
+
+function validateName(label: string, value: string): string | null {
+  if (value.trim().length < MIN_NAME_LENGTH) {
+    return `${label} must contain at least ${MIN_NAME_LENGTH} characters.`
+  }
+  return null
+}
+
+const EMAIL_REGEX =
+  /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+function validateEmail(email: string): string | null {
+  if (!EMAIL_REGEX.test(email)) {
+    return 'Please enter a valid email address.'
+  }
+  return null
+}
+
+function validatePassword(pwd: string): string | null {
+  if (pwd.length < 8) {
+    return 'Password must contain at least 8 characters.'
+  }
+  if (!/[A-Z]/.test(pwd)) {
+    return 'Password must contain at least one uppercase letter.'
+  }
+  if (!/\d/.test(pwd)) {
+    return 'Password must contain at least one number.'
+  }
+  if (!/[^A-Za-z0-9]/.test(pwd)) {
+    return 'Password must contain at least one special character.'
+  }
+  return null
+}
+
 async function handleRegister () {
   try {
+    errorMessage.value = ''
+
     if (
       !first_name.value ||
       !last_name.value ||
@@ -30,6 +67,30 @@ async function handleRegister () {
       !confirmPassword.value
     ) {
       errorMessage.value = 'All fields are required!'
+      return
+    }
+
+    const firstNameError = validateName('First name', first_name.value)
+    if (firstNameError) {
+      errorMessage.value = firstNameError
+      return
+    }
+
+    const lastNameError = validateName('Last name', last_name.value)
+    if (lastNameError) {
+      errorMessage.value = lastNameError
+      return
+    }
+
+    const emailError = validateEmail(email.value)
+    if (emailError) {
+      errorMessage.value = emailError
+      return
+    }
+
+    const pwdError = validatePassword(password.value)
+    if (pwdError) {
+      errorMessage.value = pwdError
       return
     }
 
@@ -56,9 +117,9 @@ async function handleRegister () {
 
 <template>
   <div class="register-page">
-    <NavbarLogin />
+<!--    <NavbarLogin />-->
 
-    <a href="/login" class="back-link">← Return</a>
+<!--    <a href="/login" class="back-link">← Return</a>-->
 
     <section class="register-section container">
       <img src="../assets/images/CV/CV_Login_EN.jpg" class="cv-image" />
@@ -72,9 +133,9 @@ async function handleRegister () {
 
         <p>or use email for registration</p>
 
-        <input v-model="first_name" type="text" class="input-field" placeholder="First name" />
-        <input v-model="last_name" type="text" class="input-field" placeholder="Last name" />
-        <input v-model="email" type="email" class="input-field" placeholder="Email" />
+        <input v-model="first_name" type="text" class="input-field" placeholder="First name" required />
+        <input v-model="last_name" type="text" class="input-field" placeholder="Last name" required />
+        <input v-model="email" type="email" class="input-field" placeholder="Email" required/>
 
         <div class="password-field">
           <input
@@ -82,6 +143,8 @@ async function handleRegister () {
             v-model="password"
             class="input-field"
             placeholder="Password"
+            minlength="8"
+            required
           />
           <span class="toggle-password" @click="showPassword = !showPassword">
             {{ showPassword ? 'Hide' : 'Show' }}
@@ -94,6 +157,8 @@ async function handleRegister () {
             v-model="confirmPassword"
             class="input-field"
             placeholder="Confirm Password"
+            minlength="8"
+            required
           />
           <span class="toggle-password" @click="showConfirmPassword = !showConfirmPassword">
             {{ showConfirmPassword ? 'Hide' : 'Show' }}
@@ -101,20 +166,49 @@ async function handleRegister () {
         </div>
 
         <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
+        <p v-if="error" class="error">{{ error }}</p>
 
-        <button class="btn-principale" @click="handleRegister">Sign up</button>
+        <button
+          class="btn-principale btn btn-primary"
+          :disabled="loading"
+          @click="handleRegister"
+        >
+          <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
+          Sign up
+        </button>
 
-        <RouterLink to="/login" class="sign-in-link">Already have an account?</RouterLink>
+        <div class="login-link">
+          <span class="signin-text">Already have an account ?</span>
+          <RouterLink to="/login" class="Sign-in-link">Sign in</RouterLink>
+        </div>
       </div>
     </section>
 
     <div v-if="showSuccess" class="success-toast">Account created!</div>
 
-    <Footer />
+<!--    <Footer />-->
   </div>
 </template>
 
 <style scoped>
+.login-link {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  justify-content: center;
+  margin: 25px 0 0;
+  font-size: 13px;
+}
+
+.signin-text {
+  color: #8e8e8e;
+}
+
+.Sign-in-link {
+  text-decoration: none;
+  color: #0f62a4;
+  cursor: pointer;
+}
 .register-section {
   margin: 100px auto;
   display: grid;
@@ -216,4 +310,82 @@ p {
   max-width: 400px;
   box-shadow: -8px 8px 18px rgba(175, 178, 180, 0.83);
 }
+
+/* Evite les débordements horizontaux */
+.register-page {
+  overflow-x: hidden;
+  padding: 0 16px;
+}
+
+/* =========================
+   TABLETTE (<= 992px)
+========================= */
+@media (max-width: 992px) {
+  .register-section {
+    margin: 70px auto;
+    gap: 30px;
+  }
+
+  .register-title {
+    font-size: 34px;
+  }
+
+  .register-card {
+    max-width: 440px;
+    padding: 22px;
+  }
+
+  .cv-image {
+    max-width: 360px;
+  }
+}
+
+/* =========================
+   MOBILE (<= 768px)
+========================= */
+@media (max-width: 768px) {
+  .register-section {
+    margin: 40px auto;
+    grid-template-columns: 1fr; /*  une seule colonne */
+    gap: 20px;
+  }
+
+  /*  On affiche l'image au-dessus (plus joli) */
+  .cv-image {
+    order: 1;
+    max-width: 360px;
+  }
+
+  .register-card {
+    max-width: 420px;
+    padding: 18px;
+  }
+
+  .register-title {
+    font-size: 28px;
+  }
+
+  .toggle-password {
+    top: 50%;
+  }
+}
+
+/* =========================
+   PETITS MOBILES (<= 420px)
+========================= */
+@media (max-width: 420px) {
+  .register-title {
+    font-size: 24px;
+  }
+
+  .register-card {
+    padding: 16px;
+  }
+
+  .google-circle-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
 </style>

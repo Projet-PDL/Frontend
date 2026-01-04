@@ -9,21 +9,21 @@ export type LanguageDTO = {
 
 
 // GET - Récupérer toutes les langues d'un CV
-export async function apiGetLanguages(cvId: string) {
+export async function apiGetLanguages(cvId: number) {
   const { data } = await http.get(`/cvs/${cvId}/language/`);
   return data;
 }
 
 // POST - Ajouter une nouvelle langue à un CV
-export async function apiCreateLanguage(cvId: string, dto: LanguageDTO) {
+export async function apiCreateLanguage(cvId: number, dto: LanguageDTO) {
   const { data } = await http.post(`/cvs/${cvId}/language/`, dto);
   return data;
 }
 
 // PUT - Modifier une langue existante
 export async function apiUpdateLanguage(
-  cvId: string,
-  languageId: string,
+  cvId: number,
+  languageId: number,
   dto: LanguageDTO
 ) {
   const { data } = await http.put(`/cvs/${cvId}/language/${languageId}`, dto);
@@ -31,7 +31,7 @@ export async function apiUpdateLanguage(
 }
 
 // DELETE - Supprimer une langue
-export async function apiDeleteLanguage(cvId: string, languageId: string) {
+export async function apiDeleteLanguage(cvId: number, languageId: string) {
   const { data } = await http.delete(`/cvs/${cvId}/language/${languageId}`);
   return data;
 }

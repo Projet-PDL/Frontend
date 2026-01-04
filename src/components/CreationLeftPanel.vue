@@ -8,6 +8,7 @@ import LanguageSection from '@/components/sections/LanguageSection.vue'
 import SkillsSection from '@/components/sections/SkillsSection.vue'
 import SocialNetworkSection from '@/components/sections/SocialNetworkSection.vue'
 import InterestSection from '@/components/sections/InterestSection.vue'
+import CertificationSection from '@/components/sections/Certification.vue'
 
 const activeSection = ref(null)
 
@@ -24,7 +25,8 @@ const setActiveSection = (sectionName) => {
     <ProfessionalExperienceSection :isActive="activeSection === 'experience'" @open="setActiveSection('experience')" />
     <LanguageSection :isActive="activeSection === 'language'" @open="setActiveSection('language')" />
     <SkillsSection :isActive="activeSection === 'skills'" @open="setActiveSection('skills')" />
-    <SocialNetworkSection :isActive="activeSection === 'social'" @open="setActiveSection('social')" />
+    <CertificationSection :isActive="activeSection === 'certification'" @open="setActiveSection('certification')" />
+<!--    <SocialNetworkSection :isActive="activeSection === 'social'" @open="setActiveSection('social')" />-->
     <InterestSection :isActive="activeSection === 'interest'" @open="setActiveSection('interest')" />
   </div>
 </template>

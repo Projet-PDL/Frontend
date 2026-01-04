@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, onMounted } from "vue";
-import { useCvStore } from "@/stores/cv";
+import { computed } from "vue";
+import { useCvStore } from "@/stores/cv.store.ts";
 import { storeToRefs } from "pinia";
+import { useDateFormatter } from '@/helpers/useDateFormatter.ts'
 
 const cv = useCvStore();
 const {
@@ -11,8 +12,11 @@ const {
   experiences,
   languages,
   skills,
-  interests
+  interests,
+  certifications
 } = storeToRefs(cv);
+
+const { formatDate, formatMonthYear } = useDateFormatter();
 
 const fullName = computed(() =>
   `${profile.value.first_name} ${profile.value.last_name}`.trim()
@@ -38,7 +42,7 @@ const contactItems = computed(() => {
     items.push({ icon: "bi bi-geo-alt", value: location.value })
 
   if (profile.value.birth_date)
-    items.push({ icon: "bi bi-calendar", value: "Date of birth " + profile.value.birth_date })
+    items.push({ icon: "bi bi-calendar", value: "Date of birth " + formatDate(profile.value.birth_date) })
 
   if (profile.value.website_url)
     items.push({ icon: "bi bi-link-45deg", value: profile.value.website_url })
@@ -58,20 +62,20 @@ const contactItems = computed(() => {
       <h2>{{ profile.headline }}</h2>
 
       <div class="contact-grid">
-        <div class="contact-item" v-for="item in contactItems" :key="item.label">
+        <div class="contact-item" v-for="item in contactItems" :key="item.value">
           <i :class="item.icon"></i> {{ item.value }}
         </div>
       </div>
     </header>
 
-    <section class="section">
+    <section class="section section-block" v-if="summary.professional_summary">
       <div class="section-title">ABOUT</div>
       <p class="about-text">{{ summary.professional_summary }}</p>
     </section>
 
-    <section class="section" v-if="languages.length">
+    <section class="section section-block" v-if="languages.length">
       <div class="section-title">LANGUAGES</div>
-        <div class="languages-grid">
+      <div class="languages-grid">
         <div v-for="l in languages" :key="l.position" class="lang-item">
           <strong>{{ l.language_name }}</strong>
           <span>{{ l.proficiency_level }}</span>
@@ -79,21 +83,31 @@ const contactItems = computed(() => {
       </div>
     </section>
 
-    <section class="section" v-if="educations.length">
+    <section class="section section-block" v-if="educations.length">
       <div class="section-title">EDUCATION</div>
       <div v-for="edu in educations" :key="edu.position" class="edu-block">
         <div class="edu-header">
           <strong>{{ edu.degree }}, {{ edu.school }}</strong>
           <span>
-            <template v-if="!edu.end_date">Since {{ edu.start_date }}</template>
-            <template v-else>From {{ edu.start_date }} to {{ edu.end_date }}</template>
+            <template v-if="!edu.end_date">Since {{ formatMonthYear(edu.start_date) }}</template>
+            <template v-else>{{ formatMonthYear(edu.start_date) }} to {{ formatMonthYear(edu.end_date) }}</template>
           </span>
         </div>
         <p class="edu-desc">{{ edu.description }}</p>
       </div>
     </section>
 
-    <section class="section" v-if="experiences.length">
+    <section class="section section-block" v-if="certifications.length">
+      <div class="section-title">CERTIFICATIONS</div>
+      <div v-for="cert in certifications" :key="cert.position" class="edu-block">
+        <div class="edu-header">
+          <strong>{{ cert.name }}, {{ cert.issuer }}</strong>
+          <span>{{ formatMonthYear(cert.issueDate) }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-block" v-if="experiences.length">
       <div class="section-title">WORK EXPERIENCE</div>
       <div v-for="exp in experiences" :key="exp.position" class="edu-block">
         <div class="edu-item">
@@ -107,8 +121,8 @@ const contactItems = computed(() => {
           </div>
           <div class="edu-date">
             <span class="date">
-              <template v-if="!exp.end_date">Since {{ exp.start_date }}</template>
-              <template v-else>From {{ exp.start_date }} to {{ exp.end_date }}</template>
+              <template v-if="!exp.end_date">Since {{ formatMonthYear(exp.start_date) }}</template>
+              <template v-else>{{ formatMonthYear(exp.start_date) }} to {{ formatMonthYear(exp.end_date) }}</template>
             </span>
             <span>{{ exp.location }}</span>
           </div>
@@ -116,7 +130,7 @@ const contactItems = computed(() => {
       </div>
     </section>
 
-    <section class="section" v-if="skills.length">
+    <section class="section section-block" v-if="skills.length">
       <div class="section-title">SKILLS</div>
       <div class="skills-grid">
         <div v-for="s in skills" :key="s.position" class="edu-block">
@@ -130,29 +144,53 @@ const contactItems = computed(() => {
       </div>
     </section>
 
-    <section class="section" v-if="interests.length">
+    <section class="section section-block" v-if="interests.length">
       <div class="section-title">INTERESTS</div>
       <p v-for="i in interests" :key="i.position" class="interest-item">
         {{ i.name }}
       </p>
     </section>
 
+    <!-- Marge de page pour le scroll -->
+    <div class="page-margin"></div>
   </div>
 </template>
 
 <style scoped>
 .cv-ats {
   width: 794px;
-  height: 1123px;
+  min-height: 1123px;
   background: white;
   font-family: "Inter", sans-serif;
   padding: 30px 40px;
+  overflow: visible;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-margin {
+  height: 30px;
+  width: 100%;
+}
+
+/* Empêcher les sections d'être coupées */
+.section-block {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: 20px;
+}
+
+.section-block .section-title {
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .header {
   text-align: center;
   padding-bottom: 25px;
   border-bottom: 1px solid black;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .header h1 {
@@ -200,9 +238,15 @@ const contactItems = computed(() => {
   line-height: 1.5;
 }
 
-.languages-grid, .skills-grid {
+.languages-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(120px, 1fr));
+  gap: 8px 20px;
+}
+
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(120px, 1fr));
   gap: 8px 20px;
 }
 
@@ -211,10 +255,14 @@ const contactItems = computed(() => {
   align-items: center;
   gap: 15px;
   font-size: 10px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .edu-block {
   margin-bottom: 10px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .edu-header {
@@ -227,12 +275,15 @@ const contactItems = computed(() => {
 
 .edu-desc{
   font-size: 9px;
+  margin-top: 2px;
 }
 
 .edu-item {
   display: flex;
   justify-content: space-between;
   gap: 40px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .edu-text{
@@ -249,6 +300,8 @@ const contactItems = computed(() => {
 .exp-list {
   padding-left: 25px;
   margin-top: 4px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .exp-list li {
@@ -271,5 +324,7 @@ const contactItems = computed(() => {
   font-size: 10px;
   margin-bottom: 4px;
   font-weight: 600;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 </style>

@@ -4,9 +4,9 @@ import Footer from '@/components/Footer.vue'
 </script>
 
 <template>
-  <NavbarHome />
+<!--  <NavbarHome />-->
   <div class="about-page">
-    <a href="/" class="back-link">← Homepage</a>
+<!--    <a href="/" class="back-link">← Homepage</a>-->
 
     <section class="intro">
       <div class="text">
@@ -92,7 +92,7 @@ import Footer from '@/components/Footer.vue'
       </p>
       <RouterLink to="/login" class="btn-principale">Generate your CV now</RouterLink>
     </div>
-    <Footer />
+<!--    <Footer />-->
   </div>
 </template>
 
@@ -105,6 +105,8 @@ section {
   grid-template-columns: 1fr 1fr;
   align-items: center;
   gap: 40px;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 h1 {
@@ -199,4 +201,150 @@ h1 {
 .join p {
   max-width: 600px;
 }
+
+/*  Sécurité overflow sur petits écrans */
+.about-page {
+  overflow-x: hidden;
+  padding: 0 16px;
+}
+
+.illustration {
+  max-width: 100%;
+  height: auto;
+}
+
+/* =========================
+   TABLETTE (<= 992px)
+========================= */
+@media (max-width: 992px) {
+  section {
+    width: 100%;
+    gap: 28px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  h1 {
+    font-size: 34px;
+  }
+
+  .text p, .join p {
+    font-size: 20px;
+  }
+
+  .intro .illustration {
+    max-width: 520px;
+  }
+
+  .values-grid {
+    width: 100%;
+    gap: 30px;
+  }
+
+  /* les cartes prennent plus de place, mais restent centrées */
+  .values-grid {
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    padding: 0 8px;
+  }
+}
+
+/* =========================
+   MOBILE (<= 768px)
+========================= */
+@media (max-width: 768px) {
+  section {
+    width: 100%;
+    margin: 24px auto;
+    grid-template-columns: 1fr; /*  une seule colonne */
+    gap: 18px;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    text-align: center;
+  }
+
+  /*  Sur mobile on met l’image en premier pour intro & mission (plus joli)
+     (mission a déjà l’image à gauche, intro a l’image à droite) */
+  .intro .illustration {
+    order: -1;
+    max-width: 420px;
+  }
+
+  .mission .illustration {
+    order: -1;
+    max-width: 420px;
+  }
+
+  .intro {
+    margin-top: 0;
+  }
+
+  .mission {
+    margin-top: 0;
+  }
+
+  h1 {
+    font-size: 28px;
+    margin-bottom: 10px;
+  }
+
+  .text p, .join p {
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+
+  .values {
+    padding: 28px 0;
+  }
+
+  .values-grid {
+    width: 100%;
+    grid-template-columns: 1fr; /*  cartes en colonne */
+    gap: 18px;
+    margin: 20px auto;
+    padding: 0 10px;
+  }
+
+  .value {
+    padding: 22px 14px;
+  }
+
+  .join {
+    margin: 24px 0;
+    padding: 0 8px;
+  }
+
+  .join p {
+    max-width: 100%;
+  }
+
+  /*  bouton full width sur mobile (si btn-principale n'est pas déjà responsive) */
+  .btn-principale {
+    display: inline-block;
+    width: 100%;
+    max-width: 360px;
+    text-align: center;
+  }
+}
+
+/* =========================
+   PETITS MOBILES (<= 420px)
+========================= */
+@media (max-width: 420px) {
+  h1 {
+    font-size: 24px;
+  }
+
+  .text p, .join p {
+    font-size: 15px;
+  }
+
+  .value h3 {
+    margin-bottom: 12px;
+  }
+
+  .value p {
+    font-size: 15px;
+  }
+}
+
 </style>

@@ -38,6 +38,34 @@ const testimonials = [
   }
 ]
 
+const cardsPerView = ref(3)
+
+function updateCardsPerView() {
+  const w = window.innerWidth
+  if (w < 768) cardsPerView.value = 1       // mobile
+  else if (w < 992) cardsPerView.value = 2  // tablette
+  else cardsPerView.value = 3               // desktop
+}
+
+const nextTestimonial = () => {
+  currentTestimonial.value =
+    (currentTestimonial.value + cardsPerView.value) % testimonials.length
+}
+
+const prevTestimonial = () => {
+  currentTestimonial.value =
+    (currentTestimonial.value - cardsPerView.value + testimonials.length) % testimonials.length
+}
+
+const visibleTestimonials = computed(() => {
+  const result = []
+  for (let i = 0; i < cardsPerView.value; i++) {
+    const index = (currentTestimonial.value + i) % testimonials.length
+    result.push(testimonials[index])
+  }
+  return result
+})
+
 const handleSubscribe = () => {
   if (email.value) {
     alert(`Merci de vous être abonné avec : ${email.value}`)
@@ -45,39 +73,24 @@ const handleSubscribe = () => {
   }
 }
 
-const nextTestimonial = () => {
-  currentTestimonial.value = (currentTestimonial.value + 3) % testimonials.length
-}
-
-const prevTestimonial = () => {
-  currentTestimonial.value = (currentTestimonial.value - 3 + testimonials.length) % testimonials.length
-}
-
 const goToTestimonial = (index: number) => {
   currentTestimonial.value = index
 }
 
-// Solution avec computed property - retourne les objets testimonials directement
-const visibleTestimonials = computed(() => {
-  const result = []
-  for (let i = 0; i < 3; i++) {
-    const index = (currentTestimonial.value + i) % testimonials.length
-    result.push(testimonials[index])
-  }
-  return result
-})
-
 onMounted(() => {
+  updateCardsPerView()
+  window.addEventListener('resize', updateCardsPerView)
+
   testimonialInterval = window.setInterval(() => {
     nextTestimonial()
   }, 5000)
 })
 
 onUnmounted(() => {
-  if (testimonialInterval) {
-    clearInterval(testimonialInterval)
-  }
+  window.removeEventListener('resize', updateCardsPerView)
+  if (testimonialInterval) clearInterval(testimonialInterval)
 })
+
 </script>
 
 <template>
@@ -301,15 +314,15 @@ onUnmounted(() => {
                       <i class="bi bi-star-fill text-warning"></i>
                     </div>
                     <p class="mb-4" style="min-height: 100px;">
-                      "{{ testimonial.text }}"
+                      "{{ testimonial?.text }}"
                     </p>
                     <div class="d-flex align-items-center">
                       <div class="avatar bg-custom-blue text-white rounded-circle me-3 d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
                         <i class="bi bi-person-fill fs-4"></i>
                       </div>
                       <div>
-                        <h6 class="fw-bold mb-0">{{ testimonial.author }}</h6>
-                        <small class="text-muted">{{ testimonial.role }}</small>
+                        <h6 class="fw-bold mb-0">{{ testimonial?.author }}</h6>
+                        <small class="text-muted">{{ testimonial?.role }}</small>
                       </div>
                     </div>
                   </div>
@@ -319,20 +332,20 @@ onUnmounted(() => {
           </div>
 
           <!-- Navigation Arrows -->
-          <button 
-            @click="prevTestimonial" 
+          <button
+            @click="prevTestimonial"
             class="carousel-nav carousel-nav-prev btn btn-light rounded-circle shadow position-absolute"
-            style="left: -20px; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; z-index: 10;"
           >
             <i class="bi bi-chevron-left"></i>
           </button>
-          <button 
-            @click="nextTestimonial" 
+
+          <button
+            @click="nextTestimonial"
             class="carousel-nav carousel-nav-next btn btn-light rounded-circle shadow position-absolute"
-            style="right: -20px; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; z-index: 10;"
           >
             <i class="bi bi-chevron-right"></i>
           </button>
+
 
           <!-- Dots Indicator -->
           <div class="carousel-indicators d-flex justify-content-center gap-2 mt-4">
@@ -583,4 +596,148 @@ onUnmounted(() => {
     right: 0 !important;
   }
 }
+
+/* ---------------------------
+   Global safety
+---------------------------- */
+.home-view {
+  overflow-x: hidden;
+}
+
+/* ---------------------------
+   HERO
+---------------------------- */
+.hero-title {
+  font-size: 2.5rem;
+}
+
+@media (max-width: 992px) {
+  .hero-title {
+    font-size: 2.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-title {
+    font-size: 2rem;
+    text-align: center;
+  }
+
+  .hero .lead {
+    text-align: center;
+  }
+
+  .stat-item {
+    min-width: auto;
+  }
+
+  .hero .btn {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    display: inline-flex;
+    justify-content: center;
+  }
+}
+
+/* ---------------------------
+   HOW IT WORKS arrows
+---------------------------- */
+@media (max-width: 992px) {
+  .how-it-works .bi-arrow-right {
+    display: none !important;
+  }
+}
+
+/* ---------------------------
+   COMPANIES
+---------------------------- */
+.company-logo {
+  min-height: 70px;
+}
+
+@media (max-width: 768px) {
+  .company-logo {
+    min-height: 60px;
+    padding: 12px !important;
+  }
+}
+
+/* ---------------------------
+   TESTIMONIALS
+---------------------------- */
+.testimonial-carousel {
+  min-height: 320px;
+}
+
+/* Flèches dans l’écran, pas dehors */
+.carousel-nav {
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  height: 50px;
+  z-index: 10;
+}
+
+/* Position desktop/tablette */
+.carousel-nav-prev {
+  left: 8px;
+}
+.carousel-nav-next {
+  right: 8px;
+}
+
+@media (max-width: 768px) {
+  .carousel-nav {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+/* ---------------------------
+   CTA image responsive
+---------------------------- */
+@media (max-width: 992px) {
+  .cta img {
+    margin-left: 0 !important;
+    max-width: 100% !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .cta .row {
+    text-align: center;
+  }
+
+  .cta img {
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    display: block;
+  }
+
+  .cta .btn {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+    display: inline-flex;
+    justify-content: center;
+  }
+}
+
+/* ---------------------------
+   ABOUT background readability
+---------------------------- */
+.about-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 0;
+}
+
+.about-section > .container {
+  position: relative;
+  z-index: 1;
+}
+
 </style>

@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { useCvStore } from "@/stores/cv";
+import { useCvStore } from "@/stores/cv.store.ts";
 import { storeToRefs } from "pinia";
+import { useDateFormatter } from '@/helpers/useDateFormatter.ts'
 
 const cv = useCvStore();
 const {
   profile,
-  user,
+  userProfilePicture,
   summary,
   educations,
   experiences,
   languages,
   skills,
   socialNetworks,
-  interests
+  interests,
+  certifications
 } = storeToRefs(cv);
+
+const { formatDate, formatMonthYear } = useDateFormatter();
 
 const platformIcons = {
   LinkedIn: 'bi-linkedin',
@@ -53,7 +57,9 @@ const location = computed(() => {
               <div class="col">
                 <p v-if="profile.phone"><i class="bi bi-telephone"></i> {{ profile.phone }}</p>
                 <p v-if="location"><i class="bi bi-geo-alt"></i> {{ location }}</p>
-                <p v-if="profile.birth_date"><i class="bi bi-calendar"></i> Date of birth {{ profile.birth_date }}</p>
+                <p v-if="profile.birth_date">
+                  <i class="bi bi-calendar"></i> Date of birth {{ formatDate(profile.birth_date) }}
+                </p>
               </div>
 
               <div class="col">
@@ -71,21 +77,21 @@ const location = computed(() => {
         </div>
 
         <div class="informations">
-          <section v-if="summary.professional_summary">
+          <section v-if="summary.professional_summary" class="section-block">
             <h3>Profil</h3>
             <p class="summary-text">{{ summary.professional_summary }}</p>
           </section>
 
-          <section v-if="educations.length">
+          <section v-if="educations.length" class="section-block">
             <h3>Education</h3>
             <div v-for="edu in educations" :key="edu.position" class="edu-item">
               <div class="edu-date">
                 <span class="date">
                   <template v-if="!edu.end_date">
-                    Since {{ edu.start_date }}
+                    Since {{ formatMonthYear(edu.start_date) }}
                   </template>
                   <template v-else>
-                    {{ edu.start_date }} - {{ edu.end_date }}
+                    {{ formatMonthYear(edu.start_date) }} - {{ formatMonthYear(edu.end_date) }}
                   </template>
                 </span>
               </div>
@@ -97,16 +103,32 @@ const location = computed(() => {
             </div>
           </section>
 
-          <section v-if="experiences.length">
+          <section v-if="certifications.length">
+            <h3>Certifications</h3>
+            <div v-for="cert in certifications" :key="cert.position" class="edu-item">
+              <div class="edu-date">
+                <span class="date">
+                  {{ formatMonthYear(cert.issueDate) }}
+                </span>
+              </div>
+              <div class="edu-text">
+                <strong class="edu-title">{{ cert.name }}</strong>
+                <p class="edu-school">{{ cert.issuer }}</p>
+                <!--                <p class="edu-desc" v-if="cert.credentialUrl">{{ cert.credentialUrl }}</p>-->
+              </div>
+            </div>
+          </section>
+
+          <section v-if="experiences.length" class="section-block">
             <h3>Work experience</h3>
             <div v-for="exp in experiences" :key="exp.position" class="edu-item">
               <div class="edu-date">
                 <span class="date">
                   <template v-if="!exp.end_date">
-                    Since {{ exp.start_date }}
+                    Since {{ formatMonthYear(exp.start_date) }}
                   </template>
                   <template v-else>
-                    {{ exp.start_date }} - {{ exp.end_date }}
+                    {{ formatMonthYear(exp.start_date) }} - {{ formatMonthYear(exp.end_date) }}
                   </template>
                 </span>
                 <span>{{ exp.location }}</span>
@@ -127,11 +149,13 @@ const location = computed(() => {
 
       <div class="right-side">
         <div class="photo-block">
-          <img v-if="user.profile_picture" :src="user.profile_picture" />
+          <img v-if="userProfilePicture"
+               :src="userProfilePicture"
+               alt="Profile picture"/>
         </div>
 
         <div class="right">
-          <section v-if="languages.length">
+          <section v-if="languages.length" class="section-block">
             <h3>Languages</h3>
             <div v-for="l in languages" :key="l.position" class="right-item">
               <div class="edu-text">
@@ -141,7 +165,7 @@ const location = computed(() => {
             </div>
           </section>
 
-          <section v-if="skills.length">
+          <section v-if="skills.length" class="section-block">
             <h3>Skills</h3>
             <div v-for="s in skills" :key="s.position" class="right-item">
               <div class="edu-text">
@@ -151,7 +175,7 @@ const location = computed(() => {
             </div>
           </section>
 
-          <section v-if="interests.length">
+          <section v-if="interests.length" class="section-block">
             <h3>Interests</h3>
             <div v-for="i in interests" :key="i.position" class="right-item">
               <div class="edu-text">
@@ -160,7 +184,7 @@ const location = computed(() => {
             </div>
           </section>
 
-          <section v-if="socialNetworks.length">
+          <section v-if="socialNetworks.length" class="section-block">
             <h3>Social networks</h3>
             <div v-for="sn in socialNetworks" :key="sn.position" class="right-item">
               <div class="edu-text">
@@ -174,6 +198,9 @@ const location = computed(() => {
       </div>
 
     </div>
+
+    <!-- Marge de page pour le scroll -->
+    <div class="page-margin"></div>
   </div>
 </template>
 
@@ -181,22 +208,44 @@ const location = computed(() => {
 
 .cv-page {
   width: 794px;
-  height: 1123px;
+  min-height: 1123px;
   background: white;
   padding-left: 30px;
+  padding-bottom: 30px;
   font-family: "Inter", sans-serif;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
+  margin-bottom: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.page-margin {
+  height: 50px;
+  width: 100%;
 }
 
 .cv-layout {
   display: grid;
   grid-template-columns: 65% 35%;
-  height: 100%;
+  min-height: 1093px;
+}
+
+/* Empêcher les sections d'être coupées */
+.section-block {
+  page-break-inside: avoid;
+  break-inside: avoid;
+  margin-bottom: 20px;
+}
+
+.section-block h3 {
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .header{
   border-right: 2px solid #dcdcdc;
+  page-break-after: avoid;
+  break-after: avoid;
 }
 
 .general-informations {
@@ -227,6 +276,11 @@ const location = computed(() => {
   color: black;
 }
 
+.identity {
+  page-break-after: avoid;
+  break-after: avoid;
+}
+
 .identity h1 {
   font-size: 18px;
   font-weight: 500;
@@ -238,9 +292,9 @@ const location = computed(() => {
   font-size: 20px;
   color: black;
   margin-top: 0;
-  display: inline-block; 
+  display: inline-block;
   border-bottom: 2px solid #dcdcdc;
-  padding-bottom: 5px;  
+  padding-bottom: 5px;
 }
 
 .informations {
@@ -269,6 +323,9 @@ const location = computed(() => {
   display: flex;
   align-items: flex-start;
   gap: 20px;
+  margin-bottom: 15px;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .edu-date {
@@ -299,9 +356,16 @@ const location = computed(() => {
   margin-bottom: 0;
 }
 
+.edu-desc {
+  font-size: 13px;
+  margin-bottom: 0;
+}
+
 .exp-list {
   padding-left: 15px;
   list-style-position: outside;
+  page-break-inside: avoid;
+  break-inside: avoid;
 }
 
 .exp-list li {
@@ -315,7 +379,7 @@ const location = computed(() => {
   flex-direction: column;
   align-items: center;
   gap: 40px;
-  height: 100%;
+  min-height: 100%;
 }
 
 .photo-block{
@@ -339,13 +403,15 @@ const location = computed(() => {
   flex-direction: column;
 }
 
-.right-item p{
-  margin-bottom: 2px;
-}
-
 .right-item {
   margin-bottom: 8px;
   font-size: 14px;
+  page-break-inside: avoid;
+  break-inside: avoid;
+}
+
+.right-item p{
+  margin-bottom: 2px;
 }
 
 .right section{

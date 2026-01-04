@@ -12,7 +12,7 @@ export type InterestDTO = {
 };
 
 export type InterestResponse = {
-  id: string;
+  id: number;
   name: string;
   category: string;
   source: string;
@@ -20,12 +20,17 @@ export type InterestResponse = {
   cvId: string;
 };
 
-export async function apiCreateInterests(cvId: string, dto: InterestDTO) {
+export async function apiCreateInterests(cvId: number, dto: InterestDTO) {
   const { data } = await http.post(`/cvs/${cvId}/interest/interests`, dto);
   return data;
 }
 
-export async function apiUpdateInterests(cvId: string, dto: InterestDTO) {
+export async function apiUpdateInterests(cvId: number, dto: InterestDTO) {
   const { data } = await http.put(`/cvs/${cvId}/interest/interests`, dto);
   return data;
+}
+
+export async function apiDeleteInterest(cvId: number, interestId: number) {
+  const { data } = await http.delete(`/cvs/${cvId}/interest/${interestId}`)
+  return data
 }

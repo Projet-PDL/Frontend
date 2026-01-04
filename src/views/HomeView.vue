@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
-import NavbarHome from '../components/NavbarHome.vue'
 import NavbarApp from '@/components/NavbarApp.vue';
 import Footer from '@/components/Footer.vue';
 
@@ -8,8 +6,12 @@ import Footer from '@/components/Footer.vue';
 
 <template>
   <main>
-    <NavbarHome />
-    <TheWelcome />
+    <NavbarApp />
+
+    <div>
+      <RouterView/>
+    </div>
+
     <Footer />
   </main>
 </template>

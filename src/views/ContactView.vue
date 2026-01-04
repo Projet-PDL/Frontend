@@ -32,9 +32,9 @@ const sendMail = () => {
 </script>
 
 <template>
-  <NavbarHome />
+<!--  <NavbarHome />-->
   <div class="contact-page">
-    <a href="/" class="back-link">← Homepage</a>
+<!--    <a href="/" class="back-link">← Homepage</a>-->
 
     <section class="intro">
       <h1>Contact us</h1>
@@ -96,7 +96,7 @@ const sendMail = () => {
 
       </form>
     </section>
-    <Footer />
+<!--    <Footer />-->
   </div>
 </template>
 
@@ -106,6 +106,8 @@ const sendMail = () => {
   min-height: 100vh;
   background : #F9F9F9;
   overflow: hidden;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
 }
 
 .intro {
@@ -214,6 +216,122 @@ label {
   font-size: 14px;
   margin: 20px 0 -10px;
   text-align: right;
+}
+
+/*  base : éviter les débordements sur petits écrans */
+.contact-page {
+  padding-left: 16px;
+  padding-right: 16px;
+}
+
+/* Desktop -> tu gardes ton 70%, mais on sécurise avec un max-width */
+.contact-card {
+  max-width: 1100px;
+}
+
+/* =========================
+   TABLETTE (<= 992px)
+========================= */
+@media (max-width: 992px) {
+  .contact-page {
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .contact-card {
+    width: 100%;
+    grid-template-columns: 280px 1fr; /* un peu plus compact */
+    gap: 24px;
+    padding: 10px;
+  }
+
+  .form-panel {
+    margin: 16px 16px 16px 0;
+  }
+
+  .intro h1 {
+    font-size: 26px;
+  }
+}
+
+/* =========================
+   MOBILE (<= 768px)
+========================= */
+@media (max-width: 768px) {
+  .intro {
+    margin: 10px 0 24px;
+  }
+
+  .intro h1 {
+    font-size: 24px;
+  }
+
+  .contact-card {
+    width: 100%;
+    grid-template-columns: 1fr; /*  une seule colonne */
+    gap: 16px;
+    padding: 10px;
+    border-radius: 16px;
+  }
+
+  .info-panel {
+    border-radius: 14px;
+    padding: 18px;
+    min-height: 220px;
+  }
+
+  .info-panel .subtitle {
+    margin: 0 0 18px;
+  }
+
+  .social {
+    margin-top: 18px;
+    justify-content: center;
+  }
+
+  .form-panel {
+    margin: 0;
+    padding: 6px 6px 14px;
+  }
+
+  .form-grid.two-cols {
+    grid-template-columns: 1fr; /*  champs en colonne */
+    gap: 14px;
+  }
+
+  .actions {
+    justify-content: stretch;
+  }
+
+  .actions .btn-principale {
+    width: 100%;
+    text-align: center;
+    padding: 14px 16px;
+  }
+
+  .error {
+    text-align: left;
+    margin: 14px 0 0;
+  }
+}
+
+/* =========================
+   PETITS MOBILES (<= 420px)
+========================= */
+@media (max-width: 420px) {
+  .info-row {
+    font-size: 13px;
+    gap: 8px;
+  }
+
+  .social {
+    gap: 14px;
+    font-size: 18px;
+  }
+
+  .info-panel h3 {
+    font-size: 18px;
+  }
 }
 
 </style>

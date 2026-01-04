@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from 'vue'
 import draggable from 'vuedraggable'
-import { useCvStore } from '@/stores/cv'
+import { useCvStore } from '@/stores/cv.store.ts'
 import { storeToRefs } from 'pinia'
 
 const cv = useCvStore()
