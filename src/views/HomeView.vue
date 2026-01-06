@@ -1,9 +1,17 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import NavbarApp from '@/components/NavbarApp.vue';
+import Footer from '@/components/Footer.vue';
+
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <NavbarApp />
+
+    <div>
+      <RouterView/>
+    </div>
+
+    <Footer />
   </main>
 </template>
