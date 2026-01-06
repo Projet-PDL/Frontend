@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const http = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://4.178.57.107',
+  baseURL: import.meta.env.VITE_API_URL || 'http://40.66.40.230',
   timeout: 15000,
 });
 

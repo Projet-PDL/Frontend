@@ -170,7 +170,8 @@ async function saveProfileInfo() {
     if (hasExistingProfileInfo()) {
       await updateProfileInfo(cvId, dto)
     } else {
-      await createProfileInfo(cvId, dto)
+      //await createProfileInfo(cvId, dto)
+      await updateProfileInfo(cvId, dto)
     }
 
     // Recharge l'agrégat CV pour resync le store

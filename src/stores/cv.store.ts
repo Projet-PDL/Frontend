@@ -7,6 +7,7 @@ import {
   apiListCvs,
   type CvListItem,
 } from '@/services/cvmanagement.service.ts'
+import { createProfileInfo } from '@/services/profile.service.ts'
 
 export interface Profile {
   first_name: string;
@@ -133,6 +134,7 @@ export const useCvStore = defineStore("cv", () => {
     try {
       const res = await apiCreateCv(title);
       const cvId = res?.data?.id ?? res?.data?.cv?.id ?? res?.id;
+      await createSections(cvId);
       currentCvId.value = Number(cvId);
       return currentCvId.value;
     } catch (e: any) {
@@ -140,6 +142,15 @@ export const useCvStore = defineStore("cv", () => {
       throw e;
     } finally {
       loading.value = false;
+    }
+  }
+
+  async function createSections(cvId: number) {
+    try {
+      await createProfileInfo(cvId);
+    } catch (e: any) {
+      error.value = e?.response?.data?.message || 'Failed to create empty sections';
+      throw e;
     }
   }
 
