@@ -128,7 +128,7 @@ async function handleRegister () {
         <h2 class="register-title">Create account</h2>
 
         <button type="button" class="google-circle-btn">
-          <img src="@/assets/images/Google.png" alt="Google icon" class="google-icon" />
+          <img src="@/assets/images/google.png" alt="Google icon" class="google-icon" />
         </button>
 
         <p>or use email for registration</p>
