@@ -50,7 +50,8 @@ async function ensureListLoaded() {
     await cvStore.loadMyCvs()
     // si aucun cv sélectionné, prendre le premier (utile après refresh)
     if (!cvStore.currentCvId && cvStore.myCvs.length > 0) {
-      await cvStore.selectCv(cvStore.myCvs[0].id)
+      const firstCv = cvStore.myCvs[0]
+      if (firstCv) await cvStore.selectCv(firstCv.id)
     }
   } catch (e) {
     console.error(e)

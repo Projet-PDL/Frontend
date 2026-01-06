@@ -68,7 +68,7 @@ async function persistBulk(list: any[]) {
     position: i + 1
   }))
 
-  await apiCreateSkills(cvId, { items })
+  await apiCreateSkills(String(cvId), { items })
   await cvStore.loadCv(cvId)
 }
 
@@ -107,7 +107,7 @@ const deleteSkill = async (index: number) => {
 
     // if we have an id, delete server-side
     if (s?.id) {
-      await apiDeleteSkill(cvId, Number(s.id))
+      await apiDeleteSkill(String(cvId), String(s.id))
       await cvStore.loadCv(cvId)
     } else {
       // fallback: bulk resave without this item

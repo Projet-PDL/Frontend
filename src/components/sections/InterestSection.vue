@@ -46,6 +46,7 @@ function startEdit(index: number) {
   editingIndex.value = index
   isEditing.value = true
   const it = interests.value[index]
+  if (!it) return
   tempInterest.value = { name: it.name ?? '', category: it.category ?? '' }
 }
 
