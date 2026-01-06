@@ -20,9 +20,7 @@ const openSection = () => emit('open')
 /* =====================
    Source = Store
 ===================== */
-const languages = computed({
-  get: () => cvStore.languages
-})
+const languages = computed(() => cvStore.languages)
 
 /* =====================
    Levels
@@ -58,10 +56,14 @@ function getLevelPercent(level?: string) {
 const isEditing = ref(false)
 const editingIndex = ref<number | null>(null)
 
-const tempLanguage = ref({
+const tempLanguage = ref<{
+  language_name: string
+  proficiency_level: string
+  position: number | null
+}>({
   language_name: '',
   proficiency_level: LEVEL_OPTIONS[0],
-  position: null as number | null
+  position: null
 })
 
 /* =====================
@@ -84,9 +86,11 @@ const startAdd = () => {
 }
 
 const startEdit = (index: number) => {
+  const lang = languages.value[index]
+  if (!lang) return
   editingIndex.value = index
   isEditing.value = true
-  tempLanguage.value = { ...languages.value[index] }
+  tempLanguage.value = { ...lang }
   // fallback si ancien item n'a pas un level présent dans options
   if (!LEVEL_OPTIONS.includes(tempLanguage.value.proficiency_level as any)) {
     tempLanguage.value.proficiency_level = LEVEL_OPTIONS[0]
@@ -105,12 +109,13 @@ const saveLanguage = async () => {
       proficiencyLevel: tempLanguage.value.proficiency_level,
       position:
         editingIndex.value !== null
-          ? languages.value[editingIndex.value].position
+          ? (languages.value[editingIndex.value]?.position ?? languages.value.length + 1)
           : languages.value.length + 1
     }
 
     if (editingIndex.value !== null) {
       const lang = languages.value[editingIndex.value]
+      if (!lang) return
       console.log( "Edit" , editingIndex.value )
       await apiUpdateLanguage(cvId, lang.id, dto)
       await cvStore.loadCv(cvId)
@@ -133,6 +138,7 @@ const deleteLanguage = async (index: number) => {
   try {
     const cvId = requireCvId()
     const lang = languages.value[index]
+    if (!lang) return
 
     await apiDeleteLanguage(cvId, lang.id)
 
