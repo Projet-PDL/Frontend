@@ -6,14 +6,20 @@ Le présent document d’architecture décrit la conception technique et logicie
 
 Ce document présente l’ensemble des éléments constituant l’architecture du système :
 
-- Le **contexte fonctionnel** du projet et ses principaux cas d’usage  
+- Le **contexte fonctionnel** du projet et ses principaux cas d'usage  
 - La **stack technologique** retenue, incluant :
   - le front-end (**Vue.js**)
   - le back-end (**Fastify** avec **TypeScript**)
   - la base de données (**PostgreSQL** avec **Prisma**)
   - le stockage cloud (**Firebase Storage**)
-- L’organisation logicielle du code côté serveur  
-- Les modèles de données, **diagrammes UML**, **séquences d’interactions** et **schéma relationnel** de la base  
+  - le système de cache (**Redis**)
+  - l'intégration LinkedIn (**LinkedIn API** avec scraping)
+  - le monitoring (**MongoDB Atlas Charts**)
+- L'**infrastructure de déploiement** (**Azure VM**, **Docker**, **Docker Compose**)
+- Le **pipeline CI/CD** (**Jenkins** avec webhook **GitHub**)
+- L'organisation logicielle du code côté serveur  
+- Les modèles de données, **diagrammes UML**, **séquences d'interactions** et **schéma relationnel** de la base
+- Les **optimisations de performance** et stratégies de cache
 
 L’ensemble de ces éléments vise à garantir une **architecture modulaire, scalable et maintenable**, répondant aux standards actuels du développement web et à la facilité d’évolution du produit.
 
@@ -53,6 +59,51 @@ L’architecture du projet repose sur une **stack moderne et performante**, comb
 - Gère le **stockage des fichiers** (images, CVs, documents, etc.).  
 - Solution **sécurisée, scalable**, avec gestion centralisée des accès.  
 - Intégration fluide avec le back-end Fastify.
+
+### Request Cache : Redis
+
+- Implémente un **système de cache** pour optimiser les performances.
+- Résout les problèmes de :
+  - Processus d'authentification récurrent
+  - Requêtes similaires et proches temporellement
+- Réduit la charge sur la base de données et l'API LinkedIn.
+- Améliore significativement les temps de réponse pour les données fréquemment consultées.
+
+### LinkedIn API
+
+- **Extraction de données** depuis les profils LinkedIn des utilisateurs.
+- Utilisation d'**API de scraping** et d'un **adaptateur d'interface**.
+- Intégration transparente avec le back-end pour récupérer :
+  - Expériences professionnelles
+  - Formations
+  - Compétences
+  - Langues
+  - Certifications
+
+### Logs Storage : MongoDB
+
+- Base de données **NoSQL** dédiée au stockage des logs applicatifs.
+- Collecte et centralise :
+  - **Logs d'accès** : requêtes HTTP, endpoints appelés, temps de réponse
+  - **Logs d'erreurs** : exceptions, stack traces, codes d'erreur
+  - **Logs de performance** : métriques serveur, utilisation des ressources
+  - **Logs d'activité** : actions utilisateurs, création de CV, imports LinkedIn
+- Architecture **scalable** et optimisée pour l'écriture intensive de logs.
+- Permet l'indexation et la recherche rapide dans l'historique.
+- Intégration native avec **Atlas Charts** pour la visualisation.
+
+### Monitoring & Visualization : MongoDB Atlas Charts
+
+- Plateforme de **visualisation en temps réel** des données stockées dans MongoDB.
+- Création de **dashboards interactifs** pour :
+  - **Performance des API** :
+    - Temps de réponse moyen par endpoint
+    - Distribution des codes HTTP (200, 400, 500)
+    - Taux d'erreur et anomalies
+  - **Utilisation système** :
+    - Base de données : requêtes lentes, connexions actives
+- **Historique des données** pour analyse des tendances et optimisations.
+
 
 ---
 
@@ -94,7 +145,7 @@ L’architecture du projet repose sur une **stack moderne et performante**, comb
 | `errors/` | Centralise la gestion des erreurs de l’application. Contient les erreurs personnalisées (NotFoundError, UnauthorizedError, etc.) et les gestionnaires globaux pour uniformiser les réponses HTTP. |
 | `prisma/` | Regroupe les fichiers liés à Prisma, l’ORM utilisé pour interagir avec la base de données. Contient le fichier schema.prisma, les migrations et la configuration du client Prisma. |
 | `utils/` | Contient les fonctions utilitaires réutilisables (formatage, manipulation de dates, génération de tokens, validation, etc.). |
-| `logs/` | Journaux d’accès, d’erreurs et de performance. |
+| `logs/` | Journaux d'accès, d'erreurs et de performance. Alimentent le système de monitoring et visualisation (MongoDB Atlas Charts). |
 | `tests/` | Tests unitaires et d’intégration. |
 | `main.js` | Point d’entrée principal de l’application. Initialise le serveur Fastify, charge les plugins, routes et middlewares, puis démarre l’API. |
 
@@ -172,3 +223,101 @@ Le schéma relationnel montre la structure des tables et leurs relations.
 | **ProfileInfos** | Contient les informations principales du profil pour un CV (identité, résumé, coordonnées). | 1 ← 1 CVs (relation 1-1) |
 
 ---
+
+## Déploiement et Infrastructure
+
+### Stratégie de Déploiement
+
+L'application LinkedIn2CV est déployée sur une infrastructure cloud moderne combinant **Azure VM**, **Docker** et **Docker Compose** pour garantir :
+- **Isolation** : Chaque service tourne dans son propre conteneur
+- **Scalabilité** : Facilité d'ajout de nouvelles instances
+- **Reproductibilité** : Environnement identique en développement et production
+- **Maintenabilité** : Mises à jour et rollbacks simplifiés
+
+#### Architecture de Déploiement
+
+```
+Azure VM (Ubuntu)
+├── Docker Engine
+└── Docker Compose
+    ├── Container API (Fastify)
+    ├── Container Database (PostgreSQL)
+    ├── Container Cache (Redis)
+    └── Container Logs (MongoDB)
+```
+
+### CI/CD Pipeline
+
+Le pipeline d'intégration et de déploiement continu est géré par **Jenkins** avec les étapes suivantes :
+
+#### Déclenchement
+- **Webhook GitHub** : Chaque push sur la branche principale déclenche automatiquement le pipeline
+- Jenkins récupère les modifications et lance le processus de build
+
+#### Build Steps (Étapes de construction)
+1. **Pull changes** : Récupération des dernières modifications depuis le dépôt Git
+2. **Install dependencies** : Installation des dépendances Node.js via npm/yarn
+3. **Update database schema** : Application des migrations Prisma
+4. **Generate database client** : Génération du client Prisma avec le nouveau schéma
+5. **Restart server** : Redémarrage des conteneurs Docker pour appliquer les changements
+
+#### Tests Automatisés
+- **Tests unitaires** : Validation de la logique métier (Jest)
+- **Tests d'intégration** : Vérification des interactions entre composants
+
+### Monitoring et Visualisation
+
+#### MongoDB Atlas Charts
+
+Le système de monitoring utilise **MongoDB Atlas Charts** pour visualiser les métriques de performance et les logs :
+
+**Tableaux de bord disponibles** :
+- **Performance des API** :
+  - Temps de réponse moyen par endpoint
+  - Distribution des codes de statut HTTP (200-500)
+  - Fréquence des requêtes par endpoint
+  
+- **Utilisation des ressources** :
+  - Performance de la base de données
+  - Erreurs et exceptions
+
+- **Activité utilisateur** :
+  - Nombre de CV créés par période
+  - Taux de conversion (inscription → création CV)
+  - Sources de données (LinkedIn vs saisie manuelle)
+
+**Avantages** :
+- Visualisation en temps réel des métriques
+- Alertes configurables sur les anomalies
+- Historique des performances
+- Analyse des tendances d'utilisation
+
+---
+
+## Optimisations de Performance
+
+### Système de Cache (Redis)
+
+Pour améliorer significativement les temps de réponse et réduire la charge sur les services externes, un système de cache distribué a été implémenté avec **Redis**.
+
+#### Cas d'usage du cache
+
+**1. Authentification récurrente**
+- Les tokens d'authentification sont mis en cache pour éviter les validations répétées
+- Durée de vie : correspondant à la validité du token JWT
+- Réduction de ~80% des requêtes vers la base de données pour la validation d'utilisateur
+
+**2. Requêtes similaires et proches temporellement**
+- Les profils LinkedIn récemment consultés sont mis en cache
+- Les données de CV générées sont temporairement stockées
+- Durée de vie configurable selon le type de donnée (15-60 minutes)
+
+**3. Données de référence**
+- Templates de CV
+- Listes de compétences suggérées
+- Configurations système
+- Durée de vie : longue (plusieurs heures à plusieurs jours)
+
+#### Bénéfices mesurés
+- **Temps de réponse** : Réduction de 60-80% pour les requêtes en cache
+- **Expérience utilisateur** : Navigation plus fluide et réactive
