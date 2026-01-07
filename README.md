@@ -187,7 +187,7 @@ Le cahier de recette, détaillant les scénarios de test et les vérifications n
 
 ## Guide utilisateur
 
-Ce guide présente les principales fonctionnalités du site web et explique les étapes essentielles pour son utilisation, afin de permettre une prise en main simple et rapide.[**Guide**](Guide Linkedin2CV.pdf).
+Ce guide présente les principales fonctionnalités du site web et explique les étapes essentielles pour son utilisation, afin de permettre une prise en main simple et rapide [**Guide**](Guide_Linkedin2CV.pdf).
 
 ---
 
