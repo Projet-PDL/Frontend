@@ -101,7 +101,7 @@ const handleForgotSubmit = (forgotEmail: string) => {
         </div>
 
         <button type="button" class="btn-google">
-          <img src="@/assets/images/Google.png" alt="Google icon" class="google-icon" />
+          <img src="@/assets/images/google.png" alt="Google icon" class="google-icon" />
           <span>Sign in with Google</span>
         </button>
 

@@ -9,10 +9,13 @@ const STORAGE_KEY = 'app_locale'
 
 const savedLocale = localStorage.getItem(STORAGE_KEY) || 'en'
 
-export const i18n = createI18n({
+const i18n = createI18n({
   legacy: false,
   globalInjection: true,
   locale: savedLocale,
   fallbackLocale: 'en',
-  messages: { en, fr, es, ar }
+  messages: { en, fr, es, ar } as any
 })
+
+export { i18n }
+export default i18n

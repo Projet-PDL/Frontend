@@ -31,7 +31,7 @@ export async function apiUpdateLanguage(
 }
 
 // DELETE - Supprimer une langue
-export async function apiDeleteLanguage(cvId: number, languageId: string) {
+export async function apiDeleteLanguage(cvId: number, languageId: number) {
   const { data } = await http.delete(`/cvs/${cvId}/language/${languageId}`);
   return data;
 }

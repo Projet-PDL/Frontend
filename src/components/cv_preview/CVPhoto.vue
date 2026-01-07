@@ -20,7 +20,7 @@ const {
 
 const { formatDate, formatMonthYear } = useDateFormatter();
 
-const platformIcons = {
+const platformIcons: Record<string, string> = {
   LinkedIn: 'bi-linkedin',
   Facebook: 'bi-facebook',
   Twitter: 'bi-twitter-x',
