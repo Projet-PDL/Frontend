@@ -15,7 +15,7 @@ export type ProfileDTO = {
   websiteUrl?: string
 }
 
-export async function createProfileInfo(cvId: number, dto: ProfileDTO) {
+export async function createProfileInfo(cvId: number, dto?: ProfileDTO) {
   const { data } = await http.post(`/cvs/${cvId}/profile-info`, dto)
   return data
 }
